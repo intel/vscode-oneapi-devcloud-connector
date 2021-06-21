@@ -1,5 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import { execSync } from 'child_process';
 import * as vscode from 'vscode';
 
 
@@ -34,22 +35,28 @@ export  function activate(context: vscode.ExtensionContext) {
 	
 	context.subscriptions.push(vscode.commands.registerCommand('devcloud.inputCygwinPath', () => {
 		vscode.window.showInputBox({prompt: "Enter Cygwin location", placeHolder: "C:\\cygwin64\\bin\\mintty.exe"});
-	
+	    execSync("C:\\cygwin64\\bin\\bash.exe");
+		
     }));
-
+//
 	context.subscriptions.push(vscode.commands.registerCommand('devcloud.createCygwinTerminal', () => {	
-		let CygwinTerminal = vscode.window.createTerminal(`Cygwin`,"C:\\cygwin64\\bin\\bash.exe",' -i -l');
-		CygwinTerminal.sendText("ssh devcloud");
+		let CygwinTerminal = vscode.window.createTerminal(`Tunnel1`,"C:\\cygwin64\\bin\\bash.exe",' -i -l -e "devcloud.sh"');
+		CygwinTerminal.sendText("qsub -I");
+		CygwinTerminal.sendText("qstat -f");
+
+	//	CygwinTerminal.sendText("pbsnodes | sort | grep properties");
+	//	CygwinTerminal.sendText('echo "ComputeNodeName=$(hostname -f)"');
+	
 		CygwinTerminal.show();
-		//CygwinTerminal.sendText("qsub -I");
-		//vscode.window.showInformationMessage('Type in terminal "ssh devcloud"\n Then wait for connection\n Then type "qsub -I"');
+		''
     }));
 
 	context.subscriptions.push(vscode.commands.registerCommand('devcloud.createCygwinTerminal2', () => {	
-		let CygwinTerminal2 = vscode.window.createTerminal(`Cygwin`,"C:\\cygwin64\\bin\\bash.exe",' -i -l');
+		let CygwinTerminal2 = vscode.window.createTerminal(`Tunnel2`,"C:\\cygwin64\\bin\\bash.exe",' -i -l');
 		CygwinTerminal2.show();
 		//vscode.window.showInformationMessage('Type in terminal "ssh node.aidevcloud"\n Then wait for connection',{ modal: true });
     }));
+	
 	
 
 	context.subscriptions.push();
