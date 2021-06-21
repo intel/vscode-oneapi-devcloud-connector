@@ -10,30 +10,19 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:devcloud.help",
-		"onCommand:devcloud.inputCygwinPath",
-		"onCommand:devcloud.createCygwinTerminal",
-		"onCommand:devcloud.createCygwinTerminal2",
-		"onCommand:devcloud.sendtext"
+		"onCommand:devcloud.setupConnect",
+		"onCommand:devcloud.help"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
+				"command": "devcloud.setupConnect",
+				"title": "Intel DevCloud: Setup connection"
+			},
+			{
 				"command": "devcloud.help",
-				"title": "DevCloud Help"
-			},
-			{
-				"command": "devcloud.inputCygwinPath",
-				"title": "Input path to Cygwin"
-			},
-			{
-				"command": "devcloud.createCygwinTerminal",
-				"title": "Connect to DevCloud 1st step: head node"
-			},
-			{
-				"command": "devcloud.createCygwinTerminal2",
-				"title": "Connect to DevCloud 2nd step: compute node"
+				"title": "Intel DevCloud: Get help"
 			}
 		]
 	},
