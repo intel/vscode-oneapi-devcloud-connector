@@ -40,8 +40,10 @@ export class DevConnect {
         const shellPath = this.getTerminalPath();
         const firsrtShellArgs = '-i -l -e "devcloud.sh"';
         this.firstTerminal = vscode.window.createTerminal(`DevCloud Tunnel 1`, shellPath, firsrtShellArgs);
+        this.firstTerminal.show();
         const secondShellArgs = '-i -l';
         this.secondTerminal = vscode.window.createTerminal(`DevCloud Tunnel 2`, shellPath, secondShellArgs);
+        this.secondTerminal.show();
         return true;
     }
     private getTerminalPath(): string {
