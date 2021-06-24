@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
-import * as tmp from 'tmp';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, unlinkSync } from 'fs';
 import { execSync } from 'child_process';
 
 export class DevConnect {
     private firstTerminal!: vscode.Terminal;
     private secondTerminal!: vscode.Terminal;
-    private log!: string;
-    private terminalScript!: tmp.FileResult;
+    private firstLog!: string;
+    private secondLog!: string;
     private isUnderProxy: boolean;
     private nodeName: string | undefined;
 
@@ -19,9 +18,6 @@ export class DevConnect {
     }
 
     public setupConnect(): void {
-        if (this.initTerminasl()) {
-            //error handling
-        }
         if (!this.connectToHeadNode()) {
             //error handling
         }
@@ -33,66 +29,69 @@ export class DevConnect {
     }
 
     public getHelp(): void {
-        const devCloudHelp = 'DevCloud Help';
-        vscode.window.showInformationMessage('Click for more Info', devCloudHelp).then(selection => {
+        const devCloudHelp = `DevCloud Help`;
+        vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
             if (selection) {
-                vscode.env.openExternal(vscode.Uri.parse('https://devcloud.intel.com/oneapi/get_started/'));
+                vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
             }
         });
     }
 
-    private initTerminasl(): boolean {
-        const shellPath = this.getTerminalPath();
-        const firsrtShellArgs = `-i -l -e ${this.terminalScript.name}`;
-        this.firstTerminal = vscode.window.createTerminal(`DevCloud Tunnel 1`, shellPath, firsrtShellArgs);
-        this.firstTerminal.show();
-        const secondShellArgs = '-i -l';
-        this.secondTerminal = vscode.window.createTerminal(`DevCloud Tunnel 2`, shellPath, secondShellArgs);
-        this.secondTerminal.show();
-
-        return true;
-    }
 
     private getTerminalPath(): string {
-        return "C:\\cygwin64\\bin\\bash.exe";//TODO: try to find in a default location, if missing - ask the user to specify a location
+        return `C:\\cygwin64\\bin\\bash.exe`;//TODO: try to find in a default location, if missing - ask the user to specify a location
     }
 
-    private connectToHeadNode(): boolean {
-        this.firstTerminal.sendText("qsub -I");
-        this.firstTerminal.sendText("qstat -f");
+    private async connectToHeadNode(): Promise<boolean> {
+        const shellPath = this.getTerminalPath();
+        const firsrtShellArgs = `-i -l -c "ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"`;
+        const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
+        this.firstTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 1`, shellPath: shellPath, shellArgs: firsrtShellArgs, message: message });
+
+        this.firstTerminal.sendText(`qsub -I`);
+        this.firstTerminal.sendText(`qstat -f`);
         return true;
     }
 
     private async connectToSpecificNode(): Promise<boolean> {
-        await this.getNodeName();
-        this.secondTerminal.sendText(`ssh ${this.nodeName}`);
+        if (!(await this.getNodeName())) {
+            return false;
+        }
+        const shellPath = this.getTerminalPath();
+        const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
+        const secondShellArgs = `-i -l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
+        this.secondTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 2`, shellPath: shellPath, shellArgs: secondShellArgs, message: message });
+
         return true;
     }
 
-    private async getNodeName(): Promise<void> {
+    private async getNodeName(): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                console.log('tick');
                 const log = this.getLog();
                 if (log) {
-                    const ind = log.indexOf('exec_host = ');
+                    const ind = log.indexOf(`exec_host = `);
                     if (ind !== -1) {
                         const val = log.substr(ind + 12);
                         const ind2 = val.indexOf('/');
-                        this.nodeName = val.substr(0, ind2).concat('.aidevcloud');
+                        this.nodeName = val.substr(0, ind2);
                         clearInterval(timerId);
-                        resolve();
+                        resolve(true);
                     }
                 }
             }, 1000);
-            setTimeout(() => { clearInterval(timerId); }, 30000);
+            setTimeout(() => {
+                clearInterval(timerId);
+                resolve(false);
+            }, 30000);
+
         });
     }
 
     private getLog(): string | undefined {
         let res = undefined;
         try {
-            const path = "C:\\cygwin64".concat(this.log);
+            const path = `C:\\cygwin64`.concat(this.firstLog);
             res = readFileSync(path).toString();
             return res;
         }
@@ -102,33 +101,36 @@ export class DevConnect {
     }
 
     private createTmpFiles(): boolean {
-        this.createLogFile();
-        this.createTerminalScript();
+        this.createLogFiles();
         return true;
     }
 
-    private createTerminalScript(): boolean {
-        //TODO: 
-        this.terminalScript = tmp.fileSync();
-        const script = `echo "DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!"; ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.log}`;
-        writeFileSync(this.terminalScript.name, script);
-        return true;
-    }
-
-    private createLogFile(): boolean {
-        this.log = execSync("C:\\cygwin64\\bin\\mktemp /tmp/devcloud.log.XXXXXX.txt").toString().replace('\n', '');//TODO:
-        return true;
+    private createLogFiles(): boolean {
+        try {
+            this.firstLog = execSync(`C:\\cygwin64\\bin\\bash -i -l -c "mktemp /tmp/devcloud.log1.XXXXXX.txt"`).toString().replace('\n', '');
+            this.secondLog = execSync(`C:\\cygwin64\\bin\\bash -i -l -c "mktemp /tmp/devcloud.log2.XXXXXX.txt"`).toString().replace('\n', '');
+            return true;
+        }
+        catch (err) {
+            return false;
+        }
     }
 
     public removeTmpFiles(): boolean {
-        if (!this.removeLog()) {
+        if (!this.removeLogFiles()) {
             return false;
         }
         return true;
     }
 
-    private removeLog(): boolean {
-        this.log = execSync(`C:\\cygwin64\\bin\\rm ${this.log}`).toString().replace('\n', '');//TODO:
-        return true;
+    private removeLogFiles(): boolean {
+        try {
+            unlinkSync(`C:\\cygwin64${this.firstLog}`);
+            unlinkSync(`C:\\cygwin64${this.secondLog}`);
+            return true;
+        }
+        catch (err) {
+            return false;
+        }
     }
 }
