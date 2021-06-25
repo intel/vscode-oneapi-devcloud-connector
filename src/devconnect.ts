@@ -17,12 +17,12 @@ export class DevConnect {
         return;
     }
 
-    public setupConnect(): void {
-        if (!this.connectToHeadNode()) {
-            //error handling
+    public async setupConnect(): Promise<void> {
+        if (!(await this.connectToHeadNode())) {
+            vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
         }
         if (!this.connectToSpecificNode()) {
-            //error handling
+            vscode.window.showErrorMessage("Failed to connect to specific node", { modal: true });
         }
         //this.removeTmpFiles();
         return;
@@ -47,7 +47,9 @@ export class DevConnect {
         const firsrtShellArgs = `-i -l -c "ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"`;
         const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
         this.firstTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 1`, shellPath: shellPath, shellArgs: firsrtShellArgs, message: message });
-
+        if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
+            return false;
+        }
         this.firstTerminal.sendText(`qsub -I`);
         this.firstTerminal.sendText(`qstat -f`);
         return true;
@@ -59,16 +61,19 @@ export class DevConnect {
         }
         const shellPath = this.getTerminalPath();
         const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
-        const secondShellArgs = `-i -l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
+        const secondShellArgs = `-l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
         this.secondTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 2`, shellPath: shellPath, shellArgs: secondShellArgs, message: message });
-
+        if (!(await this.checkConnection(this.secondLog, this.secondTerminal))) {
+            return false;
+        }
+        vscode.window.showInformationMessage(`Connected to ${this.nodeName}. Now you can connect to devcloud via vscode Remote - SSH.`, { modal: true });
         return true;
     }
 
     private async getNodeName(): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                const log = this.getLog();
+                const log = this.getLog(this.firstLog);
                 if (log) {
                     const ind = log.indexOf(`exec_host = `);
                     if (ind !== -1) {
@@ -88,11 +93,10 @@ export class DevConnect {
         });
     }
 
-    private getLog(): string | undefined {
+    private getLog(path: string): string | undefined {
         let res = undefined;
         try {
-            const path = `C:\\cygwin64`.concat(this.firstLog);
-            res = readFileSync(path).toString();
+            res = readFileSync(`C:\\cygwin64`.concat(path)).toString();
             return res;
         }
         catch (err) {
@@ -132,5 +136,26 @@ export class DevConnect {
         catch (err) {
             return false;
         }
+    }
+
+    private async checkConnection(pathToLog: string, terminal: vscode.Terminal): Promise<boolean> {
+        return new Promise(resolve => {
+            const timerId = setInterval(async () => {
+                const checkPattern: string = terminal === this.firstTerminal ? `Welcome to the Intel DevCloud for oneAPI Projects!` : `@${this.nodeName}`;
+                const log = this.getLog(pathToLog);
+                if (log) {
+                    const ind = log.indexOf(checkPattern);
+                    if (ind !== -1) {
+                        clearInterval(timerId);
+                        resolve(true);
+                    }
+                }
+            }, 1000);
+            setTimeout(() => {
+                clearInterval(timerId);
+                resolve(false);
+            }, 30000);
+
+        });
     }
 }
