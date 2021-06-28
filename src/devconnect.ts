@@ -89,7 +89,6 @@ export class DevConnect {
                 clearInterval(timerId);
                 resolve(false);
             }, 30000);
-
         });
     }
 
@@ -155,7 +154,6 @@ export class DevConnect {
                 clearInterval(timerId);
                 resolve(false);
             }, 30000);
-
         });
     }
 }
