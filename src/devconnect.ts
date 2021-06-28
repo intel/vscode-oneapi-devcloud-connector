@@ -21,10 +21,10 @@ export class DevConnect {
         if (!(await this.connectToHeadNode())) {
             vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
         }
-        if (!this.connectToSpecificNode()) {
+        if (!(await this.connectToSpecificNode())) {
             vscode.window.showErrorMessage("Failed to connect to specific node", { modal: true });
         }
-        //this.removeTmpFiles();
+        this.removeTmpFiles();
         return;
     }
 
