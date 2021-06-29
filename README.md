@@ -8,3 +8,7 @@ Preparing steps:
 3. Install Cygwin to the C:\cygwin64 folder: https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin/ 
 4. Get account for DevCloud and setup ssh config file and ssh.exe Cygwin client into Remote-SSH exention: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
 5. Install from VSIX DevCloud connection extension 
+
+Work with extension.
+1. Type Ctrl+Shift+P and find command "Intel DevCloud: Setup connection"
+2. Enter the command.
