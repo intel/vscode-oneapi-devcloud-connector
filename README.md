@@ -24,5 +24,8 @@ This extension makes it easy to connect and work with Devcloud with vscode.
 3. Next, two terminals will be created. The second terminal may ask to add SSH key fingerprint - type "yes"
 >NOTE: Do not close the terminals created by the extension - this will interrupt the connection to DevCloud!
 
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/fb903680-d8d8-11eb-843b-5f8a7f0290a8)
+
+
 4. If the connection setup is successful, a corresponding message will appear and then you can  connect to the compute node on DevCloud via the vscode ssh extension. To do this, open "Remote-SSH" extension and push "devcloud-vscode" button.
  
