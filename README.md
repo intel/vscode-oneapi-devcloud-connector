@@ -31,3 +31,5 @@ This extension makes it easy to connect and work with Devcloud with vscode.
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/cdabf180-d8da-11eb-8e84-493a97c4302e)
 
+5. For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
+
