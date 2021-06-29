@@ -60,7 +60,7 @@ export class DevConnect {
             return false;
         }
         const shellPath = this.getTerminalPath();
-        const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
+        const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal!';
         const secondShellArgs = `-l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
         this.secondTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 2`, shellPath: shellPath, shellArgs: secondShellArgs, message: message });
         if (!(await this.checkConnection(this.secondLog, this.secondTerminal))) {
