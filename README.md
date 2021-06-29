@@ -12,3 +12,6 @@ Preparing steps:
 Work with extension.
 1. Type Ctrl+Shift+P and find command "Intel DevCloud: Setup connection"
 2. Enter the command.
+3. Wait for several seconds. The VSCode terminal "DevCloud Tunnel 2" will grant access to compute node.
+4. Open "Remote-SSH" extention and push "devcloud-vscode" button.
+5. Wait for several seconds. You are in the your home directory in DevCloud. 
