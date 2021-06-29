@@ -10,6 +10,7 @@ This extension makes it easy to connect and work with Devcloud with vscode.
 3. Install Cygwin to the C:\cygwin64 folder: https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin/ 
 4. Get account for DevCloud and setup ssh config file and ssh.exe Cygwin client into Remote-SSH extension: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
 5. Install from VSIX DevCloud connection extension 
+
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/76a41d80-d8d6-11eb-92f4-eb060ca845c9)
 
 
