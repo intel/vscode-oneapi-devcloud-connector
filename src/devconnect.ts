@@ -36,6 +36,12 @@ export class DevConnect {
     }
 
     public async init(): Promise<boolean> {
+        const tmp = await vscode.window.showQuickPick(['Yes', 'No'], { title: "Are you under proxy?" });
+        if (!tmp) {
+            return false;
+        }
+        this.isUnderProxy = tmp === 'Yes' ? true : false;
+
         if (!(await this.findCygwinPath())) {
             return false;
         }
