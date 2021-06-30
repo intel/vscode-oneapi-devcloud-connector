@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { readFileSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, unlinkSync } from 'fs';
 import { execSync } from 'child_process';
+import { join } from 'path';
 
 export class DevConnect {
     private firstTerminal!: vscode.Terminal;
@@ -8,24 +9,56 @@ export class DevConnect {
     private firstLog!: string;
     private secondLog!: string;
     private isUnderProxy: boolean;
-    private nodeName: string | undefined;
+    private nodeName!: string;
+    private cygwinFolderPath!: string;
+    private shellPath: string | undefined;
 
     constructor() {
-        this.nodeName = undefined;
         this.isUnderProxy = false;
-        this.createTmpFiles();
-        return;
     }
 
     public async setupConnect(): Promise<void> {
+        if (!(await this.init())) {
+            return;
+        }
         if (!(await this.connectToHeadNode())) {
             vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
+            this.firstTerminal.dispose();
+            return;
         }
         if (!(await this.connectToSpecificNode())) {
             vscode.window.showErrorMessage("Failed to connect to specific node", { modal: true });
+            this.secondTerminal.dispose();
+            return;
         }
         this.removeTmpFiles();
         return;
+    }
+
+    public async init(): Promise<boolean> {
+        if (!(await this.findCygwinPath())) {
+            return false;
+        }
+        if (!this.setShell()) {
+            return false;
+        }
+        if (!this.createTmpFiles()) {
+            return false;
+        }
+        return true;
+    }
+
+    public setShell(): boolean {
+        if (process.platform === 'win32') {
+            this.shellPath = join(this.cygwinFolderPath, `bin`, `bash.exe`);
+        } else {
+            this.shellPath = '/bin/bash';
+        }
+        if (!existsSync(this.shellPath)) {
+            vscode.window.showErrorMessage(`Failed to find a shell binary. Path:${this.shellPath}`, { modal: true });
+            return false;
+        }
+        return true;
     }
 
     public getHelp(): void {
@@ -37,16 +70,27 @@ export class DevConnect {
         });
     }
 
+    private async findCygwinPath(): Promise<boolean> {
+        if (existsSync(`C:\\cygwin64`)) {
+            this.cygwinFolderPath = 'C:\\cygwin64';
+            return true;
+        } else {
+            vscode.window.showInformationMessage(`Could not find path to cygwin bash. Provide it yourself.`);
+            const uri = (await vscode.window.showOpenDialog({ canSelectFolders: true, canSelectFiles: false, canSelectMany: false }));
 
-    private getTerminalPath(): string {
-        return `C:\\cygwin64\\bin\\bash.exe`;//TODO: try to find in a default location, if missing - ask the user to specify a location
+            if (!uri) {
+                vscode.window.showErrorMessage("Failed to find a path to cygwin", { modal: true });
+                return false;
+            }
+            this.cygwinFolderPath = uri[0].fsPath;
+            return true;
+        }
     }
 
     private async connectToHeadNode(): Promise<boolean> {
-        const shellPath = this.getTerminalPath();
         const firsrtShellArgs = `-i -l -c "ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"`;
         const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
-        this.firstTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 1`, shellPath: shellPath, shellArgs: firsrtShellArgs, message: message });
+        this.firstTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs, message: message });
         if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
             return false;
         }
@@ -59,10 +103,10 @@ export class DevConnect {
         if (!(await this.getNodeName())) {
             return false;
         }
-        const shellPath = this.getTerminalPath();
         const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal!';
         const secondShellArgs = `-l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
-        this.secondTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 2`, shellPath: shellPath, shellArgs: secondShellArgs, message: message });
+        this.secondTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 2`, shellPath: this.shellPath, shellArgs: secondShellArgs, message: message });
+        this.secondTerminal.show();
         if (!(await this.checkConnection(this.secondLog, this.secondTerminal))) {
             return false;
         }
@@ -95,7 +139,7 @@ export class DevConnect {
     private getLog(path: string): string | undefined {
         let res = undefined;
         try {
-            res = readFileSync(`C:\\cygwin64`.concat(path)).toString();
+            res = readFileSync(join(this.cygwinFolderPath, path)).toString();
             return res;
         }
         catch (err) {
@@ -104,14 +148,17 @@ export class DevConnect {
     }
 
     private createTmpFiles(): boolean {
-        this.createLogFiles();
+        if (!this.createLogFiles()) {
+            vscode.window.showErrorMessage("Failed to create Log Files", { modal: true });
+            return false;
+        }
         return true;
     }
 
     private createLogFiles(): boolean {
         try {
-            this.firstLog = execSync(`C:\\cygwin64\\bin\\bash -i -l -c "mktemp /tmp/devcloud.log1.XXXXXX.txt"`).toString().replace('\n', '');
-            this.secondLog = execSync(`C:\\cygwin64\\bin\\bash -i -l -c "mktemp /tmp/devcloud.log2.XXXXXX.txt"`).toString().replace('\n', '');
+            this.firstLog = execSync(`${this.shellPath} -i -l -c "mktemp /tmp/devcloud.log1.XXXXXX.txt"`).toString().replace('\n', '');
+            this.secondLog = execSync(`${this.shellPath} -i -l -c "mktemp /tmp/devcloud.log2.XXXXXX.txt"`).toString().replace('\n', '');
             return true;
         }
         catch (err) {
@@ -128,8 +175,8 @@ export class DevConnect {
 
     private removeLogFiles(): boolean {
         try {
-            unlinkSync(`C:\\cygwin64${this.firstLog}`);
-            unlinkSync(`C:\\cygwin64${this.secondLog}`);
+            unlinkSync(join(this.cygwinFolderPath, this.firstLog));
+            unlinkSync(join(this.cygwinFolderPath, this.secondLog));
             return true;
         }
         catch (err) {
