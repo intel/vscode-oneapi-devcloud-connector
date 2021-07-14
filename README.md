@@ -1,5 +1,7 @@
 # VSCode extension for connection to Intel oneAPI DevCloud.
 
+This readme link: https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect#readme
+
 ***
 This extension simplifies connection to DevCloud with VSCode.
 
