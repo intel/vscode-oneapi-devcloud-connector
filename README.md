@@ -87,3 +87,7 @@ To close connection to DevCloud and kill your interactive session you should:
 2. Close both service terminals:
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/329e8f4f-1bb1-4ee8-9a3b-fd06ba436311)
 
+## Known issues
+1. Connection via proxy is not available currently.
+2. Do not create two or more connections at the same time. This case is not supported at this time.
+3. If you have any alive PBS jobs on Devcloud (run or in queue), the extension will not connect to Devcloud. 
