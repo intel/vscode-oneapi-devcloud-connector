@@ -32,13 +32,17 @@ Work through VPN is not supported. Switch off VPN on the host machine (i.e. that
 ### Check connection to DevCloud login node
 To be sure that your ssh setup is correct, open terminal (Cygwin terminal on Windows / bash terminal on Linux) and run "ssh devcloud" command. 
 
-### Install from VSIX DevCloud connection extension 
+### Install the DevCloud connection extension from VSIX
+Download vsix file from latest release: https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/releases
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/76a41d80-d8d6-11eb-92f4-eb060ca845c9)
+Install vsix:
 
+* Click the left menu icon for Extensions (1)
+* Click button "..." (2)
+* Click "Install from VSIX..." button (3)
 
->At this time the extension supports Windows host with direct Internet access(VPN must be turned off
-). Linux and connection via proxy will be supported later.
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/f173026a-33b4-44bc-b9b0-702ffc9d33e3)
+
 
 ## Setup connection to DevCloud.
 1. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
