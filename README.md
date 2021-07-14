@@ -13,22 +13,22 @@ The extension automates this process and creates tunnel by one command.
 
 
 ## Prerequisites:
-Extension supports OS Windows and Linux Ubuntu (tested platforms).
+Extension supports OS Windows and Linux Ubuntu 18 (tested platforms).
 
-Direct access to Internet required. 
+Direct access to the Internet required. 
 
 Extension also supports access via proxy, but this feature is not working because currently tunnel creating via proxy is not supported by DevCloud.
 
 Work through VPN is not supported. Switch off VPN on the host machine (i.e. that you use for connection to DevCloud).
 
 ### Windows ssh setup
-1. Install VSCode and Remote-SSH extension
+1. Install VSCode 1.56 or later and Remote-SSH extension.
 2. Install Cygwin to the C:\cygwin64 folder: https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin/ 
    Automated installation is recommended. Make sure that ssh.exe and nc.exe are present in /cygwin64/bin folder.
 3. Get account for DevCloud and setup ssh config file and ssh.exe Cygwin client into Remote-SSH extension: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
 
 ### Linux ssh setup
-1. Install VSCode and Remote-SSH extension
+1. Install VSCode 1.56 or later and Remote-SSH extension
 2. Get account for DevCloud and setup ssh config file: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
 
 ### Check connection to DevCloud login node
