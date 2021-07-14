@@ -44,10 +44,15 @@ Install vsix:
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/f173026a-33b4-44bc-b9b0-702ffc9d33e3)
 
 
-## Setup connection to DevCloud.
+## Start work with extension.
 1. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 2. Type **Intel DevCloud** and select `Intel DevCloud: Setup connection`
-3. Next, two terminals will be created. The second terminal may ask to add SSH key fingerprint - type "yes"
+
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/22faa42a-cb5c-43ab-b37e-f7ad63f37e6c)
+
+2. Next, two service terminals will be created with interval of several seconds: devcloudService1 and devcloudService2 
+
+4. The second terminal may ask to add SSH key fingerprint - type "yes"
 >NOTE: Do not close the terminals created by the extension - this will interrupt the connection to DevCloud!
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/fb903680-d8d8-11eb-843b-5f8a7f0290a8)
