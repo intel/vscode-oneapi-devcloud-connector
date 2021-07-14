@@ -58,13 +58,13 @@ Select “No”. Connection via proxy is not available currently.
 
 
 4. Next, two service terminals will be created with interval of several seconds: devcloudService1 and devcloudService2 
-
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/a4a7ac66-4c7a-4a86-a203-6a90eabba69f)
+ 
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/d2bf8f12-3fd7-41ae-b262-2247ace75f26)
 
 >NOTE: These are sevrice terminals. Do not close them during the work - this will interrupt the connection to DevCloud!
 
 5. The second terminal may ask to add SSH key fingerprint - type "yes"
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/f3ae5217-be05-41ec-b880-758ababa6bbd)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/0bde8ba6-90e0-42b2-a750-c047c11c75d0)
 
 >NOTE: Do not type anything else in the terminals.
 
@@ -80,4 +80,10 @@ Select “No”. Connection via proxy is not available currently.
 Now you are in your DevCloud home folder. 
 
 8. For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
+
+## End work and close connection
+To close connection to DevCloud and kill your interactive session you should: 
+1. Close VSCode window on Devcloud (created by Remote-SSH)
+2. Close both service terminals:
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/329e8f4f-1bb1-4ee8-9a3b-fd06ba436311)
 
