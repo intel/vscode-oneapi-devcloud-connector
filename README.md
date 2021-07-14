@@ -50,17 +50,34 @@ Install vsix:
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/22faa42a-cb5c-43ab-b37e-f7ad63f37e6c)
 
-2. Next, two service terminals will be created with interval of several seconds: devcloudService1 and devcloudService2 
+3. Command will ask “Are you connecting via proxy?”
 
-4. The second terminal may ask to add SSH key fingerprint - type "yes"
->NOTE: Do not close the terminals created by the extension - this will interrupt the connection to DevCloud!
+Select “No”. Connection via proxy is not available currently.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/fb903680-d8d8-11eb-843b-5f8a7f0290a8)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/3c45a5b8-7cbc-45d3-880d-2fd7c1feba08)
 
 
-4. If the connection setup is successful, a corresponding message will appear and then you can  connect to the compute node on DevCloud via the vscode ssh extension. To do this, open "Remote-SSH" extension and push "devcloud-vscode" button.
+4. Next, two service terminals will be created with interval of several seconds: devcloudService1 and devcloudService2 
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/cdabf180-d8da-11eb-8e84-493a97c4302e)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/a4a7ac66-4c7a-4a86-a203-6a90eabba69f)
 
-5. For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
+>NOTE: These are sevrice terminals. Do not close them during the work - this will interrupt the connection to DevCloud!
+
+5. The second terminal may ask to add SSH key fingerprint - type "yes"
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/f3ae5217-be05-41ec-b880-758ababa6bbd)
+
+>NOTE: Do not type anything else in the terminals.
+
+6. If the connection setup is successful, a corresponding message will appear and then you can  connect to the compute node on DevCloud via the vscode ssh extension. 
+
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/11194224-0d41-4a1d-b440-dbc5291caf1e)
+
+
+7. To do this, open "Remote-SSH" extension and push "devcloud-vscode" button.
+
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/2911875a-cc86-452b-98a9-f189c223073b)
+
+Now you are in your DevCloud home folder. 
+
+8. For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
 
