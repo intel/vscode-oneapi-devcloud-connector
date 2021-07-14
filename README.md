@@ -1,18 +1,40 @@
 VSCode extension for connection to Intel oneAPI DevCloud.
 
 ***
-This extension makes it easy to connect and work with Devcloud with vscode.
+This extension simplifies connection to DevCloud with VSCode.
+
+Current way of connection requires manual work of creating tunnel to compute node to use VSCode: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
+
+The extension automates this process and creates tunnel by one command.
+
 ***
 
 
 ## Prerequisites:
+Extension supports OS Windows and Linux Ubuntu (tested platforms).
+
+Direct access to Internet required. 
+
+Extension also supports access via proxy, but this feature is not working because currently tunnel creating via proxy is not supported by DevCloud.
+
+Work through VPN is not supported. Switch off VPN on the host machine (i.e. that you use for connection to DevCloud).
+
+### Windows ssh setup
 1. Install VSCode and Remote-SSH extension
-3. Install Cygwin to the C:\cygwin64 folder: https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin/ 
-4. Get account for DevCloud and setup ssh config file and ssh.exe Cygwin client into Remote-SSH extension: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
-5. Install from VSIX DevCloud connection extension 
+2. Install Cygwin to the C:\cygwin64 folder: https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin/ 
+   Automated installation is recommended. Make sure that ssh.exe and nc.exe are present in /cygwin64/bin folder.
+3. Get account for DevCloud and setup ssh config file and ssh.exe Cygwin client into Remote-SSH extension: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
+
+### Linux ssh setup
+1. Install VSCode and Remote-SSH extension
+2. Get account for DevCloud and setup ssh config file: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/
+
+### Check connection to DevCloud login node
+To be sure that your ssh setup is correct, open terminal (Cygwin terminal on Windows / bash terminal on Linux) and run "ssh devcloud" command. 
+
+### Install from VSIX DevCloud connection extension 
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/76a41d80-d8d6-11eb-92f4-eb060ca845c9)
-
 
 
 >At this time the extension supports Windows host with direct Internet access(VPN must be turned off
