@@ -2,7 +2,8 @@
   "name": "devcloud",
   "displayName": "DevCloud",
   "description": "LEAVE BLANK",
-  "version": "0.0.1",
+  "version": "0.0.4",
+  "publisher": "intel-corporation",
   "engines": {
     "vscode": "^1.56.0"
   },
