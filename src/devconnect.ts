@@ -38,7 +38,7 @@ export class DevConnect {
         }
         this.isUnderProxy = tmp === 'Yes' ? true : false;
 
-        if (!this.setShell()) {
+        if (!await (this.setShell())) {
             return false;
         }
         if (!this.createTmpFiles()) {
@@ -97,10 +97,15 @@ export class DevConnect {
         if (process.platform !== 'win32') {
             this.firstTerminal.sendText(`ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}`);
         }
+
         this.firstTerminal.sendText(`qsub -I`);
         this.firstTerminal.sendText(`qstat -f`);
 
         if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
+            return false;
+        }
+        if (!(await this.checkJobQueue(this.firstLog))) {
+            vscode.window.showErrorMessage("qsub command failed. There is already a task in the qsub queue", { modal: true });
             return false;
         }
         return true;
@@ -203,11 +208,30 @@ export class DevConnect {
     private async checkConnection(pathToLog: string, terminal: vscode.Terminal): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                const checkPattern: string = terminal === this.firstTerminal ? `Job Id:` : `@${this.nodeName}`;
+                const checkPattern: string = terminal === this.firstTerminal ? `qsub: waiting for job ` : `@${this.nodeName}`;
                 const log = this.getLog(pathToLog);
                 if (log) {
+
                     const ind = log.indexOf(checkPattern);
                     if (ind !== -1) {
+                        clearInterval(timerId);
+                        resolve(true);
+                    }
+                }
+            }, 1000);
+            setTimeout(() => {
+                clearInterval(timerId);
+                resolve(false);
+            }, 30000);
+        });
+    }
+    private async checkJobQueue(pathToLog: string): Promise<boolean> {
+        return new Promise(resolve => {
+            const timerId = setInterval(async () => {
+                const log = this.getLog(pathToLog);
+                if (log) {
+                    const res = log.match(/qsub: job \S+ ready/i);
+                    if (res !== null) {
                         clearInterval(timerId);
                         resolve(true);
                     }
