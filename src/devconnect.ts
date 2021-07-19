@@ -27,7 +27,7 @@ export class DevConnect {
             return;
         }
         if (!(await this.connectToSpecificNode())) {
-            vscode.window.showErrorMessage("Failed to connect to specific node", { modal: true });
+            vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
             this.secondTerminal.dispose();
             return;
         }
@@ -36,14 +36,17 @@ export class DevConnect {
     }
 
     public async init(): Promise<boolean> {
-        const tmp = await vscode.window.showQuickPick(['Yes', 'No'], { title: "Are you under proxy?" });
+        const tmp = await vscode.window.showQuickPick(['No', 'Yes'], { title: "Are you connecting via proxy?" });
         if (!tmp) {
             return false;
         }
         this.isUnderProxy = tmp === 'Yes' ? true : false;
 
-        if (!(await this.findCygwinPath())) {
-            return false;
+        if (process.platform === 'win32')
+        {
+            if (!(await this.findCygwinPath())) {
+                return false;
+            }
         }
         if (!this.setShell()) {
             return false;
@@ -94,12 +97,25 @@ export class DevConnect {
     }
 
     private async connectToHeadNode(): Promise<boolean> {
-        const firsrtShellArgs = `-i -l -c "ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"`;
-        const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
-        this.firstTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs, message: message });
-        if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
+        const firsrtShellArgs = `-i -l -c "echo DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work! Do not type here!; ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"`;
+       // const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
+       
+       if (process.platform === 'win32') {
+        this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs });
+       }
+       else{
+        this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: '/bin/bash'});
+       // this.firstTerminal.sendText(`DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!`);
+        this.firstTerminal.sendText(`ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}`);
+       }
+
+        this.firstTerminal.show();
+
+        //checkConnection below commented because it brakes commands qsub, qstat in Linux bash
+      /*  if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
             return false;
-        }
+        }*/
+        
         this.firstTerminal.sendText(`qsub -I`);
         this.firstTerminal.sendText(`qstat -f`);
         return true;
@@ -109,14 +125,21 @@ export class DevConnect {
         if (!(await this.getNodeName())) {
             return false;
         }
-        const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal!';
-        const secondShellArgs = `-l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
-        this.secondTerminal = vscode.window.createTerminal({ name: `DevCloud Tunnel 2`, shellPath: this.shellPath, shellArgs: secondShellArgs, message: message });
+       // const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal!';
+        const secondShellArgs = `-l -c "echo DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work!; ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
+        if (process.platform === 'win32') {
+            this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: this.shellPath, shellArgs: secondShellArgs});
+        }
+        else{
+            this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: '/bin/bash'});
+           
+            this.secondTerminal.sendText(`ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}`);
+        }
         this.secondTerminal.show();
         if (!(await this.checkConnection(this.secondLog, this.secondTerminal))) {
             return false;
         }
-        vscode.window.showInformationMessage(`Connected to ${this.nodeName}. Now you can connect to devcloud via vscode Remote - SSH.`, { modal: true });
+        vscode.window.showInformationMessage(`Created tunnel to node ${this.nodeName}.\n Now you can connect to devcloud via Remote - SSH.\n Use host devcloud-vscode`, { modal: true });
         return true;
     }
 
@@ -145,7 +168,12 @@ export class DevConnect {
     private getLog(path: string): string | undefined {
         let res = undefined;
         try {
-            res = readFileSync(join(this.cygwinFolderPath, path)).toString();
+            if (process.platform === 'win32') {
+                res = readFileSync(join(this.cygwinFolderPath, path)).toString();
+            }
+            else{
+                res = readFileSync(path).toString();
+            }
             return res;
         }
         catch (err) {
@@ -181,8 +209,14 @@ export class DevConnect {
 
     private removeLogFiles(): boolean {
         try {
+            if (process.platform === 'win32') {
             unlinkSync(join(this.cygwinFolderPath, this.firstLog));
             unlinkSync(join(this.cygwinFolderPath, this.secondLog));
+            }
+            else{
+            unlinkSync(this.firstLog);
+            unlinkSync(this.secondLog);    
+            }
             return true;
         }
         catch (err) {
