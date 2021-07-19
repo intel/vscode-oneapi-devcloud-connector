@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { existsSync, readFileSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { execSync } from 'child_process';
 import { join } from 'path';
 
@@ -8,14 +8,10 @@ export class DevConnect {
     private secondTerminal!: vscode.Terminal;
     private firstLog!: string;
     private secondLog!: string;
-    private isUnderProxy: boolean;
+    private isUnderProxy!: boolean;
     private nodeName!: string;
     private cygwinFolderPath!: string;
     private shellPath: string | undefined;
-
-    constructor() {
-        this.isUnderProxy = false;
-    }
 
     public async setupConnect(): Promise<void> {
         if (!(await this.init())) {
@@ -42,12 +38,6 @@ export class DevConnect {
         }
         this.isUnderProxy = tmp === 'Yes' ? true : false;
 
-        if (process.platform === 'win32')
-        {
-            if (!(await this.findCygwinPath())) {
-                return false;
-            }
-        }
         if (!this.setShell()) {
             return false;
         }
@@ -57,8 +47,11 @@ export class DevConnect {
         return true;
     }
 
-    public setShell(): boolean {
+    public async setShell(): Promise<boolean> {
         if (process.platform === 'win32') {
+            if (!(await this.findCygwinPath())) {
+                return false;
+            }
             this.shellPath = join(this.cygwinFolderPath, `bin`, `bash.exe`);
         } else {
             this.shellPath = '/bin/bash';
@@ -97,27 +90,19 @@ export class DevConnect {
     }
 
     private async connectToHeadNode(): Promise<boolean> {
-        const firsrtShellArgs = `-i -l -c "echo DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work! Do not type here!; ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"`;
-       // const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!';
-       
-       if (process.platform === 'win32') {
-        this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs });
-       }
-       else{
-        this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: '/bin/bash'});
-       // this.firstTerminal.sendText(`DEVCLOUD TUNNEL TERMINAL. Do not close this terminal! Do not type here!`);
-        this.firstTerminal.sendText(`ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}`);
-       }
+        const firsrtShellArgs = process.platform === 'win32' ? `-i -l -c "ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"` : undefined;
+        const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work! Do not type here!';
+        this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs, message: message });
 
-        this.firstTerminal.show();
-
-        //checkConnection below commented because it brakes commands qsub, qstat in Linux bash
-      /*  if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
-            return false;
-        }*/
-        
+        if (process.platform !== 'win32') {
+            this.firstTerminal.sendText(`ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}`);
+        }
         this.firstTerminal.sendText(`qsub -I`);
         this.firstTerminal.sendText(`qstat -f`);
+
+        if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
+            return false;
+        }
         return true;
     }
 
@@ -125,14 +110,11 @@ export class DevConnect {
         if (!(await this.getNodeName())) {
             return false;
         }
-       // const message = 'DEVCLOUD TUNNEL TERMINAL. Do not close this terminal!';
-        const secondShellArgs = `-l -c "echo DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work!; ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"`;
-        if (process.platform === 'win32') {
-            this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: this.shellPath, shellArgs: secondShellArgs});
-        }
-        else{
-            this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: '/bin/bash'});
-           
+        const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work!';
+        const secondShellArgs = process.platform === 'win32' ? `-l -c "echo ; ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"` : undefined;
+        this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: this.shellPath, shellArgs: secondShellArgs, message: message });
+
+        if (process.platform !== 'win32') {
             this.secondTerminal.sendText(`ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}`);
         }
         this.secondTerminal.show();
@@ -171,7 +153,7 @@ export class DevConnect {
             if (process.platform === 'win32') {
                 res = readFileSync(join(this.cygwinFolderPath, path)).toString();
             }
-            else{
+            else {
                 res = readFileSync(path).toString();
             }
             return res;
@@ -209,14 +191,8 @@ export class DevConnect {
 
     private removeLogFiles(): boolean {
         try {
-            if (process.platform === 'win32') {
-            unlinkSync(join(this.cygwinFolderPath, this.firstLog));
-            unlinkSync(join(this.cygwinFolderPath, this.secondLog));
-            }
-            else{
-            unlinkSync(this.firstLog);
-            unlinkSync(this.secondLog);    
-            }
+            execSync(`${this.shellPath} -i -l -c "rm ${this.firstLog}"`);
+            execSync(`${this.shellPath} -i -l -c "rm ${this.secondLog}"`);
             return true;
         }
         catch (err) {
@@ -227,7 +203,7 @@ export class DevConnect {
     private async checkConnection(pathToLog: string, terminal: vscode.Terminal): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                const checkPattern: string = terminal === this.firstTerminal ? `Welcome to the Intel DevCloud for oneAPI Projects!` : `@${this.nodeName}`;
+                const checkPattern: string = terminal === this.firstTerminal ? `Job Id:` : `@${this.nodeName}`;
                 const log = this.getLog(pathToLog);
                 if (log) {
                     const ind = log.indexOf(checkPattern);
