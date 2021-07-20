@@ -13,7 +13,7 @@ export class DevConnect {
     private cygwinFolderPath!: string;
     private shellPath: string | undefined;
 
-    public async setupConnect(): Promise<void> {
+    public async setupConnection(): Promise<void> {
         if (!(await this.init())) {
             return;
         }
@@ -28,6 +28,13 @@ export class DevConnect {
             return;
         }
         this.removeTmpFiles();
+        return;
+    }
+
+    public async closeConnection(): Promise<void> {
+        this.firstTerminal?.dispose();
+        this.secondTerminal?.dispose();
+        vscode.window.showInformationMessage('Connection to devcloud closed');
         return;
     }
 
@@ -225,6 +232,7 @@ export class DevConnect {
             }, 30000);
         });
     }
+
     private async checkJobQueue(pathToLog: string): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
