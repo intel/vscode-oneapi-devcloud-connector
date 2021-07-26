@@ -1,7 +1,7 @@
 {
   "name": "devcloud",
   "displayName": "DevCloud",
-  "description": "LEAVE BLANK",
+  "description": "Simplifies connecting to Intel oneAPI DevCloud",
   "version": "0.0.4",
   "publisher": "intel-corporation",
   "engines": {
