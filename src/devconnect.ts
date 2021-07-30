@@ -189,7 +189,15 @@ export class DevConnect {
     private createLogFiles(): boolean {
         try {
             this.firstLog = execSync(`${this.shellPath} -i -l -c "mktemp /tmp/devcloud.log1.XXXXXX.txt"`).toString().replace('\n', '');
+            const ind = this.firstLog.indexOf(`/tmp/devcloud.log1`);
+            const val = this.firstLog.substr(ind + 0);
+            this.firstLog = val;
+
             this.secondLog = execSync(`${this.shellPath} -i -l -c "mktemp /tmp/devcloud.log2.XXXXXX.txt"`).toString().replace('\n', '');
+            const ind2 = this.secondLog.indexOf(`/tmp/devcloud.log2`);
+            const val2 = this.secondLog.substr(ind2 + 0);
+            this.secondLog = val2;
+            
             return true;
         }
         catch (err) {
