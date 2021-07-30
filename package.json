@@ -5,7 +5,7 @@
   "version": "0.0.4",
   "publisher": "intel-corporation",
   "engines": {
-    "vscode": "^1.56.0"
+    "vscode": "^1.58.1"
   },
   "categories": [
     "Other"
