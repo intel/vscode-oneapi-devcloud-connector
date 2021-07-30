@@ -38,12 +38,10 @@ Remote-SSH connection to a oneAPI DevCloud compute node.
 
 * Windows 10 or Linux Ubuntu 18 (currently tested platforms).
 
-* Direct Internet access (proxy not supported at this time).
-
 * Turn off your VPN (connecting via a VPN is not supported).
 
 
-### Windows SSH Setup
+### Windows SSH Setup (Direct Internet access)
 
 * Install VSCode 1.56 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
@@ -57,14 +55,59 @@ that ssh.exe and nc.exe are present in the /cygwin64/bin folder.
 Cygwin client [for use with the VSCode Remote-SSH
 extension.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 
-
-### Linux SSH Setup
+### Linux SSH Setup (Direct Internet access)
 
 * Install VSCode 1.56 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 * Create a oneAPI DevCloud account and [setup your SSH config file.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 
+### If you are behind an SSH proxy
+
+Modify ~/.ssh/config as below
+```
+Host devcloud.proxy
+User <user>
+Port 4022
+IdentityFile ~/.ssh/devcloud-access-key-<user>.txt
+ProxyCommand ssh -T devcloud-via-proxy
+
+# If you must route outgoing SSH connection via a corporate proxy,
+# replace PROXY_HOSTNAME and PORT below with the values provided by
+# your network administrator.
+Host devcloud-via-proxy
+User guest
+Hostname ssh.devcloud.intel.com
+IdentityFile ~/.ssh/devcloud-access-key-<user>.txt
+LocalForward 4022 c009:22
+ProxyCommand nc -x <proxy_name>:<port> %h %p
+################################################################################################
+
+################################################################################################
+# DevCloud VSCode config
+################################################################################################
+Host devcloud-vscode
+UserKnownHostsFile /dev/null
+StrictHostKeyChecking no
+Hostname localhost
+User <user>
+Port 5022
+IdentityFile ~/.ssh/devcloud-access-key-<user>.txt
+################################################################################################
+
+################################################################################################
+# SSH Tunnel config
+################################################################################################
+Host *.aidevcloud
+User <user>
+IdentityFile ~/.ssh/devcloud-access-key-<user>.txt
+ProxyCommand ssh -T devcloud.proxy nc %h %p
+LocalForward 5022 localhost:22
+LocalForward 5901 localhost:5901
+################################################################################################
+
+```
+proxy_name and port  are, respectively, the hostname and port of the corporate proxy.
 
 ### Check Your Connection to the DevCloud Login Node
 
@@ -94,8 +137,7 @@ To install the vsix file:
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/22faa42a-cb5c-43ab-b37e-f7ad63f37e6c)
 
-3. You may be asked “Are you connecting via proxy?” If so, select “No”.
-Connecting via a proxy is not currently available.
+3. You may be asked “Are you connecting via proxy?” If you use direct Internet access, select “No”. If you are behind an SSH proxy, select "Yes".
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/3c45a5b8-7cbc-45d3-880d-2fd7c1feba08)
 
@@ -142,8 +184,6 @@ To close your connection to the oneAPI DevCloud and kill your interactive sessio
 
 
 ## Known Issues
-
-* Connection via proxy is not available currently.
 
 * Do not create two or more connections at the same time. This case is not
 supported at this time.
