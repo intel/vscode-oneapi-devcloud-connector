@@ -104,8 +104,9 @@ export class DevConnect {
         if (process.platform !== 'win32') {
             this.firstTerminal.sendText(`ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}`);
         }
-
-        this.firstTerminal.sendText(`qsub -I`);
+        let jobTimeout = await vscode.window.showInputBox({ placeHolder: "hh:mm:ss", prompt: "Setup job timeout. Press ESC to use the default.", title: "Job timeout" });
+        jobTimeout = jobTimeout?.length === 0 ? undefined : jobTimeout;
+        this.firstTerminal.sendText(`qsub -I ${jobTimeout !== undefined ? `-l walltime=${jobTimeout}` : ``}`);
         this.firstTerminal.sendText(`qstat -f`);
 
         if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
