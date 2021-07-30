@@ -18,12 +18,11 @@ export class DevConnect {
             return;
         }
         if (!(await this.connectToHeadNode())) {
-            vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
             this.firstTerminal.dispose();
             return;
         }
         if (!(await this.connectToSpecificNode())) {
-            vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
+            this.firstTerminal.dispose();
             this.secondTerminal.dispose();
             return;
         }
@@ -104,17 +103,20 @@ export class DevConnect {
         if (process.platform !== 'win32') {
             this.firstTerminal.sendText(`ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}`);
         }
+        let jobTimeout = await vscode.window.showInputBox({ placeHolder: "hh:mm:ss", prompt: "Setup job timeout. Press ESC to use the default.", title: "Job timeout" });
+        jobTimeout = jobTimeout?.length === 0 ? undefined : jobTimeout;
 
-        this.firstTerminal.sendText(`qsub -I`);
-        this.firstTerminal.sendText(`qstat -f`);
-
+        this.firstTerminal.sendText(`qstat`);
         if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
+            vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
             return false;
         }
-        if (!(await this.checkJobQueue(this.firstLog))) {
-            vscode.window.showErrorMessage("qsub command failed. There is already a task in the qsub queue", { modal: true });
+        if ((await this.checkJobQueue(this.firstLog))) {
+            await vscode.window.showErrorMessage("There is already a job in the qsub queue. The extension will not be able to work until they complete.", { modal: true });
             return false;
         }
+        this.firstTerminal.sendText(`qsub -I ${jobTimeout !== undefined ? `-l walltime=${jobTimeout}` : ``}`);
+        this.firstTerminal.sendText(`qstat -f`);
         return true;
     }
 
@@ -131,6 +133,7 @@ export class DevConnect {
         }
         this.secondTerminal.show();
         if (!(await this.checkConnection(this.secondLog, this.secondTerminal))) {
+            vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
             return false;
         }
         vscode.window.showInformationMessage(`Created tunnel to node ${this.nodeName}.\n Now you can connect to devcloud via Remote - SSH.\n Use host devcloud-vscode`, { modal: true });
@@ -215,12 +218,12 @@ export class DevConnect {
     private async checkConnection(pathToLog: string, terminal: vscode.Terminal): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                const checkPattern: string = terminal === this.firstTerminal ? `qsub: waiting for job ` : `@${this.nodeName}`;
+                const checkPattern = terminal === this.firstTerminal ? /Job\s+ID\s+Name\s+User\s+Time\s+Use\s+S\s+Queue/ : `@${this.nodeName}`;
                 const log = this.getLog(pathToLog);
                 if (log) {
 
-                    const ind = log.indexOf(checkPattern);
-                    if (ind !== -1) {
+                    const ind = log.match(checkPattern);
+                    if (ind !== undefined) {
                         clearInterval(timerId);
                         resolve(true);
                     }
@@ -238,7 +241,7 @@ export class DevConnect {
             const timerId = setInterval(async () => {
                 const log = this.getLog(pathToLog);
                 if (log) {
-                    const res = log.match(/qsub: job \S+ ready/i);
+                    const res = log.match(/(\d+).\S+\s+STDIN\s+\S+\s+\S+\s+\S\s+\S+/gi);
                     if (res !== null) {
                         clearInterval(timerId);
                         resolve(true);
