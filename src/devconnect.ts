@@ -18,12 +18,11 @@ export class DevConnect {
             return;
         }
         if (!(await this.connectToHeadNode())) {
-            vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
             this.firstTerminal.dispose();
             return;
         }
         if (!(await this.connectToSpecificNode())) {
-            vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
+            this.firstTerminal.dispose();
             this.secondTerminal.dispose();
             return;
         }
@@ -110,6 +109,7 @@ export class DevConnect {
         this.firstTerminal.sendText(`qstat -f`);
 
         if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
+            vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
             return false;
         }
         if (!(await this.checkJobQueue(this.firstLog))) {
@@ -132,6 +132,7 @@ export class DevConnect {
         }
         this.secondTerminal.show();
         if (!(await this.checkConnection(this.secondLog, this.secondTerminal))) {
+            vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
             return false;
         }
         vscode.window.showInformationMessage(`Created tunnel to node ${this.nodeName}.\n Now you can connect to devcloud via Remote - SSH.\n Use host devcloud-vscode`, { modal: true });
