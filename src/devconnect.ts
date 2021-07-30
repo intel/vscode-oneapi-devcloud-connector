@@ -105,17 +105,18 @@ export class DevConnect {
         }
         let jobTimeout = await vscode.window.showInputBox({ placeHolder: "hh:mm:ss", prompt: "Setup job timeout. Press ESC to use the default.", title: "Job timeout" });
         jobTimeout = jobTimeout?.length === 0 ? undefined : jobTimeout;
-        this.firstTerminal.sendText(`qsub -I ${jobTimeout !== undefined ? `-l walltime=${jobTimeout}` : ``}`);
-        this.firstTerminal.sendText(`qstat -f`);
 
+        this.firstTerminal.sendText(`qstat`);
         if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
             vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
             return false;
         }
-        if (!(await this.checkJobQueue(this.firstLog))) {
-            vscode.window.showErrorMessage("qsub command failed. There is already a task in the qsub queue", { modal: true });
+        if ((await this.checkJobQueue(this.firstLog))) {
+            await vscode.window.showErrorMessage("There is already a job in the qsub queue. The extension will not be able to work until they complete.", { modal: true });
             return false;
         }
+        this.firstTerminal.sendText(`qsub -I ${jobTimeout !== undefined ? `-l walltime=${jobTimeout}` : ``}`);
+        this.firstTerminal.sendText(`qstat -f`);
         return true;
     }
 
@@ -217,12 +218,12 @@ export class DevConnect {
     private async checkConnection(pathToLog: string, terminal: vscode.Terminal): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                const checkPattern: string = terminal === this.firstTerminal ? `qsub: waiting for job ` : `@${this.nodeName}`;
+                const checkPattern = terminal === this.firstTerminal ? /Job\s+ID\s+Name\s+User\s+Time\s+Use\s+S\s+Queue/ : `@${this.nodeName}`;
                 const log = this.getLog(pathToLog);
                 if (log) {
 
-                    const ind = log.indexOf(checkPattern);
-                    if (ind !== -1) {
+                    const ind = log.match(checkPattern);
+                    if (ind !== undefined) {
                         clearInterval(timerId);
                         resolve(true);
                     }
@@ -240,7 +241,7 @@ export class DevConnect {
             const timerId = setInterval(async () => {
                 const log = this.getLog(pathToLog);
                 if (log) {
-                    const res = log.match(/qsub: job \S+ ready/i);
+                    const res = log.match(/(\d+).\S+\s+STDIN\s+\S+\s+\S+\s+\S\s+\S+/gi);
                     if (res !== null) {
                         clearInterval(timerId);
                         resolve(true);
