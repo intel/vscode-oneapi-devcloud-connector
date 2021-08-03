@@ -109,6 +109,15 @@ LocalForward 5901 localhost:5901
 ```
 proxy_name and port  are, respectively, the hostname and port of the corporate proxy.
 
+### If you copied ssh config file and key file from another machine
+
+Set the correct restrictive permissions on it and on the SSH client config file. To do this, run the following commands in a terminal:
+
+```
+chmod 600 ~/.ssh/devcloud-access-key-<user>.txt
+chmod 600 ~/.ssh/config
+```
+
 ### Check Your Connection to the DevCloud Login Node
 
 To be sure that your ssh setup is correct, open a terminal session (Cygwin
