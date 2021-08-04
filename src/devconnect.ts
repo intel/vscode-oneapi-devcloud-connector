@@ -9,6 +9,7 @@ export class DevConnect {
     private firstLog!: string;
     private secondLog!: string;
     private isUnderProxy!: boolean;
+    private userName!: string;
     private nodeName!: string;
     private cygwinFolderPath!: string;
     private shellPath: string | undefined;
@@ -37,7 +38,25 @@ export class DevConnect {
         return;
     }
 
-    public async init(): Promise<boolean> {
+    public getHelp(): void {
+        const devCloudHelp = `DevCloud Help`;
+        vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
+            if (selection) {
+                vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
+            }
+        });
+    }
+
+    private async init(): Promise<boolean> {
+        const sshConfig = this.getSshConfig();
+        if (!sshConfig) {
+            vscode.window.showErrorMessage('Сould not find ssh config file');
+            return false;
+        }
+        if (!await this.getUserNameFromConfig(sshConfig)) {
+            return false;
+        }
+
         const tmp = await vscode.window.showQuickPick(['No', 'Yes'], { title: "Are you connecting via proxy?" });
         if (!tmp) {
             return false;
@@ -53,7 +72,7 @@ export class DevConnect {
         return true;
     }
 
-    public async setShell(): Promise<boolean> {
+    private async setShell(): Promise<boolean> {
         if (process.platform === 'win32') {
             if (!(await this.findCygwinPath())) {
                 return false;
@@ -67,15 +86,6 @@ export class DevConnect {
             return false;
         }
         return true;
-    }
-
-    public getHelp(): void {
-        const devCloudHelp = `DevCloud Help`;
-        vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
-            if (selection) {
-                vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
-            }
-        });
     }
 
     private async findCygwinPath(): Promise<boolean> {
@@ -125,7 +135,7 @@ export class DevConnect {
             return false;
         }
         const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work!';
-        const secondShellArgs = process.platform === 'win32' ? `-l -c "echo ; ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"` : undefined;
+        const secondShellArgs = process.platform === 'win32' ? `-i -l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"` : undefined;
         this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: this.shellPath, shellArgs: secondShellArgs, message: message });
 
         if (process.platform !== 'win32') {
@@ -197,7 +207,7 @@ export class DevConnect {
             const ind2 = this.secondLog.indexOf(`/tmp/devcloud.log2`);
             const val2 = this.secondLog.substr(ind2 + 0);
             this.secondLog = val2;
-            
+
             return true;
         }
         catch (err) {
@@ -226,10 +236,9 @@ export class DevConnect {
     private async checkConnection(pathToLog: string, terminal: vscode.Terminal): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                const checkPattern = terminal === this.firstTerminal ? /Job\s+ID\s+Name\s+User\s+Time\s+Use\s+S\s+Queue/ : `@${this.nodeName}`;
+                const checkPattern = terminal === this.firstTerminal ? `${this.userName}@`: `@${this.nodeName}`;
                 const log = this.getLog(pathToLog);
                 if (log) {
-
                     const ind = log.match(checkPattern);
                     if (ind !== undefined) {
                         clearInterval(timerId);
@@ -259,7 +268,36 @@ export class DevConnect {
             setTimeout(() => {
                 clearInterval(timerId);
                 resolve(false);
-            }, 30000);
+            }, 3000);
         });
+    }
+    private async getUserNameFromConfig(config: string): Promise<boolean> {
+        const idx1 = config.indexOf(`Host devcloud`);
+        if (idx1 < 0) {
+            vscode.window.showErrorMessage(`ssh config doesn't contain devcloud host`, { modal: true });
+            return false;
+        }
+        const idx2 = config.indexOf(`User`, idx1);
+        const idx3 = config.indexOf('\n', idx2);
+
+        this.userName = config.substring(idx2, idx3).replace('User', '').trim();
+        return true;
+    }
+
+    private getSshConfig(): string | undefined {
+        let path: string;
+        if (process.platform === 'win32') {
+            path = process.env.USERPROFILE ? process.env.USERPROFILE : ``;
+            path = path !== `` ? join(path, `.ssh`, `config`) : ``;
+            if (path === ``) {
+                return undefined;
+            }
+        } else {
+            path = join(`~`, `.ssh`, `config`);
+        }
+        if (!existsSync(path)) {
+            return undefined;
+        }
+        return readFileSync(path).toString();
     }
 }
