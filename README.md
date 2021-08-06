@@ -150,7 +150,10 @@ To install the vsix file:
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/3c45a5b8-7cbc-45d3-880d-2fd7c1feba08)
 
-4. Two service terminals will be created within an interval of several
+4.You will then be prompted to set a timeout for the job. To use the default value press ESC
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/81574619/8c2872a2-1fd7-4e2f-b36c-ccdb4f29e92b)
+
+5. Two service terminals will be created within an interval of several
 seconds. They are named: `devcloudService1` and `devcloudService2`
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/d2bf8f12-3fd7-41ae-b262-2247ace75f26)
@@ -159,26 +162,26 @@ seconds. They are named: `devcloudService1` and `devcloudService2`
 connection to the oneAPI DevCloud. Do not close them during your DevCloud
 session; closing them will interrupt your SSH connection to DevCloud!
 
-5. The second terminal may ask you to add an SSH key fingerprint - type "yes"
+6. The second terminal may ask you to add an SSH key fingerprint - type "yes"
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/0bde8ba6-90e0-42b2-a750-c047c11c75d0)
 
 > NOTE: Do not type anything else in the service terminals.
 
-6. If the connection setup is successful, a corresponding message will appear
+7. If the connection setup is successful, a corresponding message will appear
 and you can connect to the compute node on DevCloud via the VSCode Remote-SSH
 extension.
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/11194224-0d41-4a1d-b440-dbc5291caf1e)
 
-7. Using the VSCode command palette, start the "Remote-SSH" extension and
+8. Using the VSCode command palette, start the "Remote-SSH" extension and
 select the `devcloud-vscode` option.
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/2911875a-cc86-452b-98a9-f189c223073b)
 
 You should now be in your DevCloud home folder in an interactive computer node.
 
-8. For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
+9. For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
 
 
 ## End the Connection
