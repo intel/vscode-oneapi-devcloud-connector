@@ -296,7 +296,7 @@ export class DevConnect {
         if (process.platform === 'win32') {
             path = join(this.cygwinFolderPath, `home`, `${process.env.USERNAME}`, `.ssh`, `config`);
         } else {
-            path = join(`~`, `.ssh`, `config`);
+            path = join(`${process.env.HOME}`, `.ssh`, `config`);
         }
         if (!existsSync(path)) {
             return undefined;
