@@ -9,19 +9,21 @@ export class DevConnect {
     private firstLog!: string;
     private secondLog!: string;
     private isUnderProxy!: boolean;
+    private userName!: string;
     private nodeName!: string;
+    private jobID!: string;
     private cygwinFolderPath!: string;
     private shellPath: string | undefined;
 
     public async setupConnection(): Promise<void> {
-        if (!(await this.init())) {
+        if (!await this.init()) {
             return;
         }
-        if (!(await this.connectToHeadNode())) {
+        if (!await this.connectToHeadNode()) {
             this.firstTerminal.dispose();
             return;
         }
-        if (!(await this.connectToSpecificNode())) {
+        if (!await this.connectToSpecificNode()) {
             this.firstTerminal.dispose();
             this.secondTerminal.dispose();
             return;
@@ -37,25 +39,42 @@ export class DevConnect {
         return;
     }
 
-    public async init(): Promise<boolean> {
-        const tmp = await vscode.window.showQuickPick(['No', 'Yes'], { title: "Are you connecting via proxy?" });
-        if (!tmp) {
-            return false;
-        }
-        this.isUnderProxy = tmp === 'Yes' ? true : false;
+    public getHelp(): void {
+        const devCloudHelp = `DevCloud Help`;
+        vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
+            if (selection) {
+                vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
+            }
+        });
+    }
 
+    private async init(): Promise<boolean> {
         if (!await (this.setShell())) {
             return false;
         }
         if (!this.createTmpFiles()) {
             return false;
         }
+        const sshConfig = await this.getSshConfig();
+        if (!sshConfig) {
+            vscode.window.showErrorMessage('Сould not find ssh config file');
+            return false;
+        }
+        if (!await this.getUserNameFromConfig(sshConfig)) {
+            return false;
+        }
+
+        const tmp = await vscode.window.showQuickPick(['No', 'Yes'], { title: "Are you connecting via proxy?" });
+        if (!tmp) {
+            return false;
+        }
+        this.isUnderProxy = tmp === 'Yes' ? true : false;
         return true;
     }
 
-    public async setShell(): Promise<boolean> {
+    private async setShell(): Promise<boolean> {
         if (process.platform === 'win32') {
-            if (!(await this.findCygwinPath())) {
+            if (!await this.findCygwinPath()) {
                 return false;
             }
             this.shellPath = join(this.cygwinFolderPath, `bin`, `bash.exe`);
@@ -67,15 +86,6 @@ export class DevConnect {
             return false;
         }
         return true;
-    }
-
-    public getHelp(): void {
-        const devCloudHelp = `DevCloud Help`;
-        vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
-            if (selection) {
-                vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
-            }
-        });
     }
 
     private async findCygwinPath(): Promise<boolean> {
@@ -106,33 +116,34 @@ export class DevConnect {
         let jobTimeout = await vscode.window.showInputBox({ placeHolder: "hh:mm:ss", prompt: "Setup job timeout. Press ESC to use the default.", title: "Job timeout" });
         jobTimeout = jobTimeout?.length === 0 ? undefined : jobTimeout;
 
-        this.firstTerminal.sendText(`qstat`);
-        if (!(await this.checkConnection(this.firstLog, this.firstTerminal))) {
+        if (!await this.checkConnection(this.firstLog, this.firstTerminal)) {
             vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
             return false;
         }
-        if ((await this.checkJobQueue(this.firstLog))) {
+
+        this.firstTerminal.sendText(`qsub -I ${jobTimeout !== undefined ? `-l walltime=${jobTimeout}` : ``}`);
+        this.firstTerminal.sendText(`qstat -f`);
+
+        if (!await this.getJobID(this.firstLog)) {
             await vscode.window.showErrorMessage("There is already a job in the qsub queue. The extension will not be able to work until they complete.", { modal: true });
             return false;
         }
-        this.firstTerminal.sendText(`qsub -I ${jobTimeout !== undefined ? `-l walltime=${jobTimeout}` : ``}`);
-        this.firstTerminal.sendText(`qstat -f`);
         return true;
     }
 
     private async connectToSpecificNode(): Promise<boolean> {
-        if (!(await this.getNodeName())) {
+        if (!await this.getNodeName()) {
             return false;
         }
         const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work!';
-        const secondShellArgs = process.platform === 'win32' ? `-l -c "echo ; ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"` : undefined;
+        const secondShellArgs = process.platform === 'win32' ? `-i -l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"` : undefined;
         this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: this.shellPath, shellArgs: secondShellArgs, message: message });
 
         if (process.platform !== 'win32') {
             this.secondTerminal.sendText(`ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}`);
         }
         this.secondTerminal.show();
-        if (!(await this.checkConnection(this.secondLog, this.secondTerminal))) {
+        if (!await this.checkConnection(this.secondLog, this.secondTerminal)) {
             vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
             return false;
         }
@@ -145,11 +156,14 @@ export class DevConnect {
             const timerId = setInterval(async () => {
                 const log = this.getLog(this.firstLog);
                 if (log) {
-                    const ind = log.indexOf(`exec_host = `);
-                    if (ind !== -1) {
-                        const val = log.substr(ind + 12);
-                        const ind2 = val.indexOf('/');
-                        this.nodeName = val.substr(0, ind2);
+                    const idx1 = log.indexOf(`Job Id: ${this.jobID}`);
+                    if (idx1 !== -1) {
+                        const jobQstat = log.substring(idx1);
+                        const matchHostRecord = 'exec_host = ';
+                        const idx2 = jobQstat.indexOf(matchHostRecord);
+                        const hostRecord = jobQstat.substring(idx2 + matchHostRecord.length);
+                        const idx3 = hostRecord.indexOf('/');
+                        this.nodeName = hostRecord.substring(0, idx3);
                         clearInterval(timerId);
                         resolve(true);
                     }
@@ -197,7 +211,7 @@ export class DevConnect {
             const ind2 = this.secondLog.indexOf(`/tmp/devcloud.log2`);
             const val2 = this.secondLog.substr(ind2 + 0);
             this.secondLog = val2;
-            
+
             return true;
         }
         catch (err) {
@@ -226,10 +240,9 @@ export class DevConnect {
     private async checkConnection(pathToLog: string, terminal: vscode.Terminal): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-                const checkPattern = terminal === this.firstTerminal ? /Job\s+ID\s+Name\s+User\s+Time\s+Use\s+S\s+Queue/ : `@${this.nodeName}`;
+                const checkPattern = terminal === this.firstTerminal ? `${this.userName}@` : `@${this.nodeName}`;
                 const log = this.getLog(pathToLog);
                 if (log) {
-
                     const ind = log.match(checkPattern);
                     if (ind !== undefined) {
                         clearInterval(timerId);
@@ -244,13 +257,16 @@ export class DevConnect {
         });
     }
 
-    private async checkJobQueue(pathToLog: string): Promise<boolean> {
+    private async getJobID(pathToLog: string): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
                 const log = this.getLog(pathToLog);
                 if (log) {
-                    const res = log.match(/(\d+).\S+\s+STDIN\s+\S+\s+\S+\s+\S\s+\S+/gi);
+                    const res = log.match(/qsub:\s+job\s+\S+\s+ready/gi);
                     if (res !== null) {
+                        const idx1 = 4 + res[0].indexOf('job ');
+                        const idx2 = res[0].indexOf(' ready');
+                        this.jobID = res[0].substring(idx1, idx2);
                         clearInterval(timerId);
                         resolve(true);
                     }
@@ -261,5 +277,30 @@ export class DevConnect {
                 resolve(false);
             }, 30000);
         });
+    }
+    private async getUserNameFromConfig(config: string): Promise<boolean> {
+        const idx1 = config.indexOf(`Host devcloud`);
+        if (idx1 < 0) {
+            vscode.window.showErrorMessage(`ssh config doesn't contain devcloud host`, { modal: true });
+            return false;
+        }
+        const idx2 = config.indexOf(`User`, idx1);
+        const idx3 = config.indexOf('\n', idx2);
+
+        this.userName = config.substring(idx2, idx3).replace('User', '').trim();
+        return true;
+    }
+
+    private async getSshConfig(): Promise<string | undefined> {
+        let path: string;
+        if (process.platform === 'win32') {
+            path = join(this.cygwinFolderPath, `home`, `${process.env.USERNAME}`, `.ssh`, `config`);
+        } else {
+            path = join(`${process.env.HOME}`, `.ssh`, `config`);
+        }
+        if (!existsSync(path)) {
+            return undefined;
+        }
+        return readFileSync(path).toString();
     }
 }

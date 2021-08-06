@@ -2,7 +2,7 @@
   "name": "devcloud",
   "displayName": "DevCloud",
   "description": "Simplifies connecting to Intel oneAPI DevCloud",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "intel-corporation",
   "engines": {
     "vscode": "^1.58.1"
