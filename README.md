@@ -43,7 +43,7 @@ Remote-SSH connection to a oneAPI DevCloud compute node.
 
 ### Windows SSH Setup (Direct Internet access)
 
-* Install VSCode 1.56 or later and install the [Remote-SSH
+* Install VSCode 1.58.1 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 * [Install
