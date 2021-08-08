@@ -57,7 +57,7 @@ extension.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 
 ### Linux SSH Setup (Direct Internet access)
 
-* Install VSCode 1.56 or later and install the [Remote-SSH
+* Install VSCode 1.58.1 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 * Create a oneAPI DevCloud account and [setup your SSH config file.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
