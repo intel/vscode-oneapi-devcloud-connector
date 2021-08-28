@@ -1,0 +1,6 @@
+{
+    "capabilities.connection_timeout.description" : "Connection\n timeout\n desc\n",
+    "capabilities.ssh_client.description": "Path to Cygwin\n or other ssh clients \n and terminals\n desc\n",
+    "capabilities.ssh_config.description": "Path to ssh config file\n desc"
+
+}

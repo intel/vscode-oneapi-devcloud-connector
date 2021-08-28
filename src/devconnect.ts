@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { existsSync, readFileSync } from 'fs';
 import { execSync } from 'child_process';
-import { join } from 'path';
+import { posix, join } from 'path';
 
 export class DevConnect {
     private firstTerminal!: vscode.Terminal;
@@ -14,6 +14,34 @@ export class DevConnect {
     private jobID!: string;
     private cygwinFolderPath!: string;
     private shellPath: string | undefined;
+
+    private _connection_timeout: number | undefined;
+    private _sshClientPath: string | undefined;
+    private _sshConfigPath: string | undefined;
+
+    public set connection_timeout(timeout: number | undefined) {
+        if (timeout === undefined || timeout < 0) {
+            this._connection_timeout = undefined;
+        } else {
+            this._connection_timeout = timeout;
+        }
+    }
+
+    public set sshClientPath(sshPath: string | undefined) {
+        if (sshPath?.length === 0 || sshPath === undefined) {
+            this._sshClientPath = undefined;
+        } else {
+            this._sshClientPath = posix.normalize(sshPath.replace(`\r`, "")).split(/[\\\/]/g).join(posix.sep);
+        }
+    }
+
+    public set sshConfigPath(sshPath: string | undefined) {
+        if (sshPath?.length === 0 || sshPath === undefined) {
+            this._sshConfigPath = undefined;
+        } else {
+            this._sshConfigPath = posix.normalize(sshPath.replace(`\r`, "")).split(/[\\\/]/g).join(posix.sep);
+        }
+    }
 
     public async setupConnection(): Promise<void> {
         if (!await this.init()) {
@@ -41,6 +69,7 @@ export class DevConnect {
 
     public getHelp(): void {
         const devCloudHelp = `DevCloud Help`;
+        vscode.window.showInformationMessage(`${this._connection_timeout} ${this._sshClientPath} ${this._sshConfigPath}`); // for testing Setting.json
         vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
             if (selection) {
                 vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));

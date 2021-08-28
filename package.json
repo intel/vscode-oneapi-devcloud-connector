@@ -11,12 +11,30 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:intel-corporation.oneapi-devcloud-connect.setupConnection",
-    "onCommand:intel-corporation.oneapi-devcloud-connect.closeConnection",
-    "onCommand:intel-corporation.oneapi-devcloud-connect.help"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": [
+      {
+        "title": "Connect to Intel oneAPI DevCloud",
+        "properties": {
+          "intel-corporation.oneapi-devcloud-connect.connection_timeout": {
+            "type": "number",
+            "description": "%capabilities.connection_timeout.description%",
+            "default": 2000
+          },
+          "intel-corporation.oneapi-devcloud-connect.ssh_client": {
+            "type": "string",
+            "description": "%capabilities.ssh_client.description%"
+          },
+          "intel-corporation.oneapi-devcloud-connect.ssh_config": {
+            "type": "string",
+            "description": "%capabilities.ssh_config.description%"
+          }
+        }
+      }
+    ],
     "commands": [
       {
         "command": "intel-corporation.oneapi-devcloud-connect.setupConnection",
