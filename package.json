@@ -1,5 +1,5 @@
 {
-  "name": "devcloud",
+  "name": "intel-corporation.oneapi-devcloud-connect",
   "displayName": "Connect to Intel oneAPI DevCloud",
   "description": "Simplifies connecting to Intel oneAPI DevCloud",
   "version": "0.0.5",
@@ -11,23 +11,23 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:devcloud.setupConnection",
-    "onCommand:devcloud.closeConnection",
-    "onCommand:devcloud.help"
+    "onCommand:intel-corporation.oneapi-devcloud-connect.setupConnection",
+    "onCommand:intel-corporation.oneapi-devcloud-connect.closeConnection",
+    "onCommand:intel-corporation.oneapi-devcloud-connect.help"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "devcloud.setupConnection",
+        "command": "intel-corporation.oneapi-devcloud-connect.setupConnection",
         "title": "Intel DevCloud: Setup connection"
       },
       {
-        "command": "devcloud.closeConnection",
+        "command": "intel-corporation.oneapi-devcloud-connect.closeConnection",
         "title": "Intel DevCloud: Close connection"
       },
       {
-        "command": "devcloud.help",
+        "command": "intel-corporation.oneapi-devcloud-connect.help",
         "title": "Intel DevCloud: Get help"
       }
     ]
