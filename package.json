@@ -1,6 +1,6 @@
 {
   "name": "devcloud",
-  "displayName": "DevCloud",
+  "displayName": "Connect to Intel oneAPI DevCloud",
   "description": "Simplifies connecting to Intel oneAPI DevCloud",
   "version": "0.0.5",
   "publisher": "intel-corporation",
