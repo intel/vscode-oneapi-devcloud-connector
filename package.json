@@ -1,6 +1,6 @@
 {
-  "name": "devcloud",
-  "displayName": "DevCloud",
+  "name": "intel-corporation.oneapi-devcloud-connect",
+  "displayName": "Connect to Intel oneAPI DevCloud",
   "description": "Simplifies connecting to Intel oneAPI DevCloud",
   "version": "0.0.5",
   "publisher": "intel-corporation",
@@ -11,23 +11,46 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:devcloud.setupConnection",
-    "onCommand:devcloud.closeConnection",
-    "onCommand:devcloud.help"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": [
+      {
+        "title": "Connect to Intel oneAPI DevCloud",
+        "properties": {
+          "intel-corporation.oneapi-devcloud-connect.proxy": {
+            "type": "boolean",
+            "description": "%capabilities.proxy.description%",
+            "default": false
+          },
+          "intel-corporation.oneapi-devcloud-connect.connection_timeout": {
+            "type": "number",
+            "description": "%capabilities.connection_timeout.description%",
+            "default": 30000
+          },
+          "intel-corporation.oneapi-devcloud-connect.job_timeout": {
+            "type": "string",
+            "description": "%capabilities.job_timeout.description%"
+          },
+          "intel-corporation.oneapi-devcloud-connect.cygwin_path": {
+            "type": "string",
+            "description": "%capabilities.cygwin_path.description%"
+          }
+        }
+      }
+    ],
     "commands": [
       {
-        "command": "devcloud.setupConnection",
+        "command": "intel-corporation.oneapi-devcloud-connect.setupConnection",
         "title": "Intel DevCloud: Setup connection"
       },
       {
-        "command": "devcloud.closeConnection",
+        "command": "intel-corporation.oneapi-devcloud-connect.closeConnection",
         "title": "Intel DevCloud: Close connection"
       },
       {
-        "command": "devcloud.help",
+        "command": "intel-corporation.oneapi-devcloud-connect.help",
         "title": "Intel DevCloud: Get help"
       }
     ]
@@ -44,7 +67,7 @@
   "devDependencies": {
     "@types/glob": "^7.1.4",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.4.6",
+    "@types/node": "^16.7.10",
     "@types/vscode": "^1.58.1",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",

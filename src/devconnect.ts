@@ -1,19 +1,56 @@
 import * as vscode from 'vscode';
 import { existsSync, readFileSync } from 'fs';
 import { execSync } from 'child_process';
-import { join } from 'path';
+import { posix, join } from 'path';
 
 export class DevConnect {
     private firstTerminal!: vscode.Terminal;
     private secondTerminal!: vscode.Terminal;
     private firstLog!: string;
     private secondLog!: string;
-    private isUnderProxy!: boolean;
     private userName!: string;
     private nodeName!: string;
     private jobID!: string;
     private cygwinFolderPath!: string;
     private shellPath: string | undefined;
+
+
+    private _proxy: boolean | undefined;
+    private _connectionTimeout: number | undefined;
+    private _jobTimeout: string | undefined;
+    private _cygwinPath: string | undefined;
+
+    public set proxy(proxy: boolean | undefined) {
+        if (proxy === undefined) {
+            this._proxy = undefined;
+        } else {
+            this._proxy = proxy;
+        }
+    }
+
+    public set connectionTimeout(timeout: number | undefined) {
+        if (timeout === undefined || timeout < 0) {
+            this._connectionTimeout = 30000;
+        } else {
+            this._connectionTimeout = timeout;
+        }
+    }
+
+    public set jobTimeout(timeout: string | undefined) {
+        if (timeout === undefined || timeout?.length === 0) {
+            this._jobTimeout = undefined;
+        } else {
+            this._jobTimeout = timeout;
+        }
+    }
+
+    public set cygwinPath(sshPath: string | undefined) {
+        if (sshPath?.length === 0 || sshPath === undefined) {
+            this._cygwinPath = undefined;
+        } else {
+            this._cygwinPath = posix.normalize(sshPath.replace(`\r`, "")).split(/[\\\/]/g).join(posix.sep);
+        }
+    }
 
     public async setupConnection(): Promise<void> {
         if (!await this.init()) {
@@ -41,6 +78,7 @@ export class DevConnect {
 
     public getHelp(): void {
         const devCloudHelp = `DevCloud Help`;
+        vscode.window.showInformationMessage(`${this._connectionTimeout} ${this._jobTimeout} ${this._cygwinPath} ${this._proxy}`); // for testing Setting.json
         vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
             if (selection) {
                 vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
@@ -63,12 +101,6 @@ export class DevConnect {
         if (!await this.getUserNameFromConfig(sshConfig)) {
             return false;
         }
-
-        const tmp = await vscode.window.showQuickPick(['No', 'Yes'], { title: "Are you connecting via proxy?" });
-        if (!tmp) {
-            return false;
-        }
-        this.isUnderProxy = tmp === 'Yes' ? true : false;
         return true;
     }
 
@@ -89,6 +121,14 @@ export class DevConnect {
     }
 
     private async findCygwinPath(): Promise<boolean> {
+        if (this._cygwinPath) {
+            if (existsSync(this._cygwinPath)) {
+                this.cygwinFolderPath = this._cygwinPath;
+                return true;
+            } else {
+                vscode.window.showWarningMessage(`Path to the cygwin folder specified in settings is invalid and was ignored.`);
+            }
+        }
         if (existsSync(`C:\\cygwin64`)) {
             this.cygwinFolderPath = 'C:\\cygwin64';
             return true;
@@ -106,22 +146,20 @@ export class DevConnect {
     }
 
     private async connectToHeadNode(): Promise<boolean> {
-        const firsrtShellArgs = process.platform === 'win32' ? `-i -l -c "ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}"` : undefined;
+        const firsrtShellArgs = process.platform === 'win32' ? `-i -l -c "ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.firstLog}"` : undefined;
         const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work! Do not type here!';
         this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs, message: message });
 
         if (process.platform !== 'win32') {
-            this.firstTerminal.sendText(`ssh devcloud${this.isUnderProxy === true ? ".proxy" : ""} > ${this.firstLog}`);
+            this.firstTerminal.sendText(`ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.firstLog}`);
         }
-        let jobTimeout = await vscode.window.showInputBox({ placeHolder: "hh:mm:ss", prompt: "Setup job timeout. Press ESC to use the default.", title: "Job timeout" });
-        jobTimeout = jobTimeout?.length === 0 ? undefined : jobTimeout;
 
         if (!await this.checkConnection(this.firstLog, this.firstTerminal)) {
             vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
             return false;
         }
 
-        this.firstTerminal.sendText(`qsub -I ${jobTimeout !== undefined ? `-l walltime=${jobTimeout}` : ``}`);
+        this.firstTerminal.sendText(`qsub -I ${this._jobTimeout !== undefined ? `-l walltime=${this._jobTimeout}` : ``}`);
         this.firstTerminal.sendText(`qstat -f`);
 
         if (!await this.getJobID(this.firstLog)) {
@@ -172,7 +210,7 @@ export class DevConnect {
             setTimeout(() => {
                 clearInterval(timerId);
                 resolve(false);
-            }, 30000);
+            }, this._connectionTimeout);
         });
     }
 
@@ -253,7 +291,7 @@ export class DevConnect {
             setTimeout(() => {
                 clearInterval(timerId);
                 resolve(false);
-            }, 30000);
+            }, this._connectionTimeout);
         });
     }
 
@@ -275,7 +313,7 @@ export class DevConnect {
             setTimeout(() => {
                 clearInterval(timerId);
                 resolve(false);
-            }, 30000);
+            }, this._connectionTimeout);
         });
     }
     private async getUserNameFromConfig(config: string): Promise<boolean> {

@@ -1,4 +1,4 @@
-# VSCode extension for connection to Intel oneAPI DevCloud.
+# Connect to Intel oneAPI DevCloud
 
 #### | [Repository][vsix-repo] | [Issues][vsix-issues] | [Documentation][vsix-docs] |
 
