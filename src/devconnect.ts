@@ -1,3 +1,5 @@
+'use strict';
+
 import * as vscode from 'vscode';
 import { existsSync, readFileSync } from 'fs';
 import { execSync } from 'child_process';
@@ -32,7 +34,7 @@ export class DevConnect {
         if (timeout === undefined || timeout < 0) {
             this._connectionTimeout = 30000;
         } else {
-            this._connectionTimeout = timeout;
+            this._connectionTimeout = timeout*1000;
         }
     }
 
@@ -78,7 +80,6 @@ export class DevConnect {
 
     public getHelp(): void {
         const devCloudHelp = `DevCloud Help`;
-        vscode.window.showInformationMessage(`${this._connectionTimeout} ${this._jobTimeout} ${this._cygwinPath} ${this._proxy}`); // for testing Setting.json
         vscode.window.showInformationMessage(`Click for more Info`, devCloudHelp).then(selection => {
             if (selection) {
                 vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
@@ -148,10 +149,11 @@ export class DevConnect {
     private async connectToHeadNode(): Promise<boolean> {
         const firsrtShellArgs = process.platform === 'win32' ? `-i -l -c "ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.firstLog}"` : undefined;
         const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work! Do not type here!';
+      
         this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs, message: message });
-
+ 
         if (process.platform !== 'win32') {
-            this.firstTerminal.sendText(`ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.firstLog}`);
+            this.firstTerminal.sendText(`ssh devcloud${this._proxy === true ? ".proxy" : ""} &> ${this.firstLog}`);
         }
 
         if (!await this.checkConnection(this.firstLog, this.firstTerminal)) {
@@ -159,7 +161,8 @@ export class DevConnect {
             return false;
         }
 
-        this.firstTerminal.sendText(`qsub -I ${this._jobTimeout !== undefined ? `-l walltime=${this._jobTimeout}` : ``}`);
+        const qsubOptions = `qsub -I ${this._jobTimeout !== undefined ? `-l walltime=${this._jobTimeout}` : ``}`;
+        this.firstTerminal.sendText(qsubOptions);
         this.firstTerminal.sendText(`qstat -f`);
 
         if (!await this.getJobID(this.firstLog)) {
