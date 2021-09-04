@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext): void {
 			devcloud.connectionTimeout = vscode.workspace.getConfiguration().get<number>("intel-corporation.oneapi-devcloud-connect.connection_timeout");
 		}
 		if (e.affectsConfiguration("intel-corporation.oneapi-devcloud-connect.job_timeout")) {
-			devcloud.jobTimeout = vscode.workspace.getConfiguration().get<string>("intel-corporation.oneapi-devcloud-connect.connection_timeout");
+			devcloud.jobTimeout = vscode.workspace.getConfiguration().get<string>("intel-corporation.oneapi-devcloud-connect.job_timeout");
 		}
 		if (e.affectsConfiguration("intel-corporation.oneapi-devcloud-connect.cygwin_path")) {
 			devcloud.cygwinPath = vscode.workspace.getConfiguration().get<string>("intel-corporation.oneapi-devcloud-connect.cygwin_path");
