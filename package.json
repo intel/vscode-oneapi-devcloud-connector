@@ -1,5 +1,5 @@
 {
-  "name": "intel-corporation.oneapi-devcloud-connect",
+  "name": "oneapi-devcloud-connect",
   "displayName": "Connect to Intel oneAPI DevCloud",
   "description": "Simplifies connecting to Intel oneAPI DevCloud",
   "version": "0.0.5",
@@ -27,15 +27,17 @@
           "intel-corporation.oneapi-devcloud-connect.connection_timeout": {
             "type": "number",
             "description": "%capabilities.connection_timeout.description%",
-            "default": 30000
+            "default": 30
           },
           "intel-corporation.oneapi-devcloud-connect.job_timeout": {
             "type": "string",
-            "description": "%capabilities.job_timeout.description%"
+            "description": "%capabilities.job_timeout.description%",
+            "default": "06:00:00"
           },
           "intel-corporation.oneapi-devcloud-connect.cygwin_path": {
             "type": "string",
-            "description": "%capabilities.cygwin_path.description%"
+            "description": "%capabilities.cygwin_path.description%",
+            "default": "C:/cygwin64"
           }
         }
       }
@@ -76,5 +78,9 @@
     "mocha": "^9.0.3",
     "typescript": "^4.3.5",
     "vscode-test": "^1.6.1"
+  },
+  "repository": {
+
   }
 }
+
