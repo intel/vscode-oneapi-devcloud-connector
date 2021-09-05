@@ -54,7 +54,11 @@
       {
         "command": "intel-corporation.oneapi-devcloud-connect.help",
         "title": "Intel DevCloud: Get help"
-      }
+      },
+      {
+        "command": "intel-corporation.oneapi-devcloud-connect.devcloudTerminal",
+        "title": "Intel DevCloud: New Devcloud terminal"
+      } 
     ]
   },
   "scripts": {
@@ -79,8 +83,5 @@
     "typescript": "^4.3.5",
     "vscode-test": "^1.6.1"
   },
-  "repository": {
-
-  }
+  "repository": {}
 }
-
