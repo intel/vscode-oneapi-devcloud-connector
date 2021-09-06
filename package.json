@@ -29,9 +29,9 @@
             "description": "%capabilities.connection_timeout.description%",
             "default": 30
           },
-          "intel-corporation.oneapi-devcloud-connect.job_timeout": {
+          "intel-corporation.oneapi-devcloud-connect.session_timeout": {
             "type": "string",
-            "description": "%capabilities.job_timeout.description%",
+            "description": "%capabilities.session_timeout.description%",
             "default": "06:00:00"
           },
           "intel-corporation.oneapi-devcloud-connect.cygwin_path": {
@@ -58,7 +58,7 @@
       {
         "command": "intel-corporation.oneapi-devcloud-connect.devcloudTerminal",
         "title": "Intel DevCloud: New Devcloud terminal"
-      } 
+      }
     ]
   },
   "scripts": {
