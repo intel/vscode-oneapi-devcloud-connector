@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext): void {
 	devcloud.isConnected = false;
 	devcloud.proxy = vscode.workspace.getConfiguration("intel-corporation.oneapi-devcloud-connect").get<boolean>("proxy");
 	devcloud.connectionTimeout = vscode.workspace.getConfiguration("intel-corporation.oneapi-devcloud-connect").get<number>('connection_timeout');
-	devcloud.jobTimeout = vscode.workspace.getConfiguration("intel-corporation.oneapi-devcloud-connect").get<string>('job_timeout');
+	devcloud.jobTimeout = vscode.workspace.getConfiguration("intel-corporation.oneapi-devcloud-connect").get<string>('session_timeout');
 	devcloud.cygwinPath = vscode.workspace.getConfiguration("intel-corporation.oneapi-devcloud-connect").get<string>('cygwin_path');
 
 	// Updating parameters when they are changed in Setting.json
@@ -20,8 +20,8 @@ export function activate(context: vscode.ExtensionContext): void {
 		if (e.affectsConfiguration("intel-corporation.oneapi-devcloud-connect.connection_timeout")) {
 			devcloud.connectionTimeout = vscode.workspace.getConfiguration().get<number>("intel-corporation.oneapi-devcloud-connect.connection_timeout");
 		}
-		if (e.affectsConfiguration("intel-corporation.oneapi-devcloud-connect.job_timeout")) {
-			devcloud.jobTimeout = vscode.workspace.getConfiguration().get<string>("intel-corporation.oneapi-devcloud-connect.job_timeout");
+		if (e.affectsConfiguration("intel-corporation.oneapi-devcloud-connect.session_timeout")) {
+			devcloud.jobTimeout = vscode.workspace.getConfiguration().get<string>("intel-corporation.oneapi-devcloud-connect.session_timeout");
 		}
 		if (e.affectsConfiguration("intel-corporation.oneapi-devcloud-connect.cygwin_path")) {
 			devcloud.cygwinPath = vscode.workspace.getConfiguration().get<string>("intel-corporation.oneapi-devcloud-connect.cygwin_path");
