@@ -201,7 +201,7 @@ export class DevConnect {
         this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2`, shellPath: this.shellPath, shellArgs: secondShellArgs, message: message });
 
         if (process.platform !== 'win32') {
-            this.secondTerminal.sendText(`ssh ${this.nodeName?.concat(`.aidevcloud`)} &> ${this.secondLog}`);
+            this.secondTerminal.sendText(`ssh ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}`);
         }
         this.secondTerminal.show();
         if (!await this.checkConnection(this.secondLog, this.secondTerminal)) {
