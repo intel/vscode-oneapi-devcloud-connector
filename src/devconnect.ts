@@ -25,8 +25,7 @@ export class DevConnect {
     private _jobTimeout: string | undefined;
     private _cygwinPath: string | undefined;
 
-    public set isConnected(isConnected: boolean)
-    {
+    public set isConnected(isConnected: boolean) {
         this._isConnected = isConnected;
     }
 
@@ -42,7 +41,7 @@ export class DevConnect {
         if (timeout === undefined || timeout < 0) {
             this._connectionTimeout = 30000;
         } else {
-            this._connectionTimeout = timeout*1000;
+            this._connectionTimeout = timeout * 1000;
         }
     }
 
@@ -63,7 +62,7 @@ export class DevConnect {
     }
 
     public async setupConnection(): Promise<void> {
-        if(this._isConnected){
+        if (this._isConnected) {
             vscode.window.showErrorMessage(`You have already connected to DevCloud`, { modal: true });
             return;
         }
@@ -96,7 +95,7 @@ export class DevConnect {
     public async closeConnection(): Promise<void> {
         this.firstTerminal?.dispose();
         this.secondTerminal?.dispose();
- 
+
         this._isConnected = false;
         vscode.window.showInformationMessage('Connection to devcloud closed');
         return;
@@ -116,7 +115,7 @@ export class DevConnect {
         });
     }
 
-   
+
     private async init(): Promise<boolean> {
         if (!await (this.setShell())) {
             return false;
@@ -179,9 +178,9 @@ export class DevConnect {
     private async connectToHeadNode(): Promise<boolean> {
         const firsrtShellArgs = process.platform === 'win32' ? `-i -l -c "ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.firstLog}"` : undefined;
         const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal during the work! Do not type here!';
-      
+
         this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs, message: message });
- 
+
         if (process.platform !== 'win32') {
             this.firstTerminal.sendText(`ssh devcloud${this._proxy === true ? ".proxy" : ""} &> ${this.firstLog}`);
         }
@@ -224,19 +223,19 @@ export class DevConnect {
     }
 
     private async createNodeTerminal(): Promise<boolean> {
-        if(this._isConnected){
+        if (this._isConnected) {
             const secondShellArgs = process.platform === 'win32' ? `-i -l -c "ssh ${this.nodeName?.concat(`.aidevcloud`)}"` : undefined;
-            this.devCloudTerminal = vscode.window.createTerminal({ name: `DevClWorkTerminal`, shellPath: this.shellPath, shellArgs: secondShellArgs});
+            this.devCloudTerminal = vscode.window.createTerminal({ name: `DevClWorkTerminal`, shellPath: this.shellPath, shellArgs: secondShellArgs });
 
             if (process.platform !== 'win32') {
                 this.devCloudTerminal.sendText(`ssh ${this.nodeName?.concat(`.aidevcloud`)}`);
             }
         }
-        else{
-            this.devCloudTerminal = vscode.window.createTerminal({shellPath: this.shellPath});
+        else {
+            this.devCloudTerminal = vscode.window.createTerminal({ shellPath: this.shellPath });
         }
         this.devCloudTerminal.show();
- 
+
         return true;
     }
 
