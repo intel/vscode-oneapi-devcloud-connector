@@ -70,15 +70,25 @@ export class DevConnect {
         if (!await this.init()) {
             return;
         }
-        if (!await this.connectToHeadNode()) {
-            this.firstTerminal.dispose();
-            return;
-        }
-        if (!await this.connectToSpecificNode()) {
-            this.firstTerminal.dispose();
-            this.secondTerminal.dispose();
-            return;
-        }
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: "Connecting to head node..."
+        }, async () => {
+            if (!await this.connectToHeadNode()) {
+                this.firstTerminal.dispose();
+                return false;
+            }
+        });
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: "Connecting to specific node..."
+        }, async () => {
+            if (!await this.connectToSpecificNode()) {
+                this.firstTerminal.dispose();
+                this.secondTerminal.dispose();
+                return false;
+            }
+        });
         this.removeTmpFiles();
         return;
     }
