@@ -69,25 +69,41 @@ export class DevConnect {
         if (!await this.init()) {
             return;
         }
-        await vscode.window.withProgress({
+        if (!await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
-            title: "Connecting to head node..."
-        }, async () => {
+            title: "Connecting to head node...",
+            cancellable: true
+        }, async (_progress, token) => {
+            token.onCancellationRequested(() => {
+                this.firstTerminal.dispose();
+                return false;
+            });
             if (!await this.connectToHeadNode()) {
                 this.firstTerminal.dispose();
                 return false;
             }
-        });
-        await vscode.window.withProgress({
+            return true;
+        })) {
+            return;
+        }
+        if (! await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
-            title: "Connecting to specific node..."
-        }, async () => {
-            if (!await this.connectToSpecificNode()) {
+            title: "Connecting to specific node...",
+            cancellable: true
+        }, async (_progress, token) => {
+            token.onCancellationRequested(() => {
+                this.firstTerminal.dispose();
+                this.secondTerminal.dispose();
+                return false;
+            }); if (!await this.connectToSpecificNode()) {
                 this.firstTerminal.dispose();
                 this.secondTerminal.dispose();
                 return false;
             }
-        });
+            return true;
+        })) {
+            return;
+        }
         this.removeTmpFiles();
         return;
     }
