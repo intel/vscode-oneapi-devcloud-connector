@@ -1,4 +1,4 @@
-# Connect to Intel oneAPI DevCloud
+# DevCloud Connector for Intel® oneAPI Toolkits
 
 #### | [Repository][vsix-repo] | [Issues][vsix-issues] | [Documentation][vsix-docs] |
 
