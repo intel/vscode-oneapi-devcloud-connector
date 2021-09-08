@@ -2,9 +2,9 @@
 
 #### | [Repository][vsix-repo] | [Issues][vsix-issues] | [Documentation][vsix-docs] |
 
-[vsix-repo]:   <https://github.com/intel/vscode-oneapi-devcloud-connect>
-[vsix-issues]: <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/issues>
-[vsix-docs]:   <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect#readme>
+[vsix-repo]:   <https://github.com/intel/vscode-vscode-oneapi-devcloud-connector>
+[vsix-issues]: <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/issues>
+[vsix-docs]:   <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector#readme>
 
 
 #### | [oneAPI Code Samples][oneapi-samples] | [oneAPI VSCode Extensions][oneapi-samples] | [Intel VSCode Extensions][intel-extensions] |
@@ -128,7 +128,7 @@ command.
 ### Install this DevCloud Connection Extension from a VSIX File
 
 Download the latest vsix file from [the releases
-page.](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/releases)
+page.](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/releases)
 
 To install the vsix file:
 
@@ -136,26 +136,26 @@ To install the vsix file:
 * Click button "..." (2)
 * Click "Install from VSIX..." button (3)
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/f173026a-33b4-44bc-b9b0-702ffc9d33e3)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/f173026a-33b4-44bc-b9b0-702ffc9d33e3)
 
 
 ## Use the Extension
 
 1. Check the extension settings
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/52ce803a-c520-4e50-83f3-518ba5349f72)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/52ce803a-c520-4e50-83f3-518ba5349f72)
 
 2. Set connection and VSCode session settings if needed
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/644f0443-6aa5-428d-b27b-de2922eca837)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/644f0443-6aa5-428d-b27b-de2922eca837)
 
 3. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 . Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/22faa42a-cb5c-43ab-b37e-f7ad63f37e6c)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/22faa42a-cb5c-43ab-b37e-f7ad63f37e6c)
 
 4. Two service terminals will be created within an interval of several
 seconds. They are named: `devcloudService1` and `devcloudService2`
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/d2bf8f12-3fd7-41ae-b262-2247ace75f26)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/d2bf8f12-3fd7-41ae-b262-2247ace75f26)
 
 > NOTE: These are service terminals that are being used to facilite your
 connection to the oneAPI DevCloud. Do not close them during your DevCloud
@@ -163,31 +163,31 @@ session; closing them will interrupt your SSH connection to DevCloud!
 
 5. The second terminal may ask you to add an SSH key fingerprint - type "yes"
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/0bde8ba6-90e0-42b2-a750-c047c11c75d0)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/0bde8ba6-90e0-42b2-a750-c047c11c75d0)
 
 > NOTE: Do not type anything else in the service terminals.
 
 6. If the connection setup is successful, a corresponding message will appear
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/3b791025-cb14-41dc-9046-087fe867b6c4)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/3b791025-cb14-41dc-9046-087fe867b6c4)
 
 and you can connect to the compute node on DevCloud via the VSCode Remote-SSH
 extension or via "Devcloud Terminal" in currect window
 
 7. Connect with "New DevCloud Terminal"
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/25a56873-8020-4d07-b7a7-9218796e49ef)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/25a56873-8020-4d07-b7a7-9218796e49ef)
 
 New DevCloud terminal will be created to work in command line on DevCloud. Terminal provides all possibilities to work with oneAPI or PBS commands. 
 For example oneAPI sample aggregator:
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/774e0d0c-83c5-4f8d-bef6-37ed0d64f307)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/774e0d0c-83c5-4f8d-bef6-37ed0d64f307)
 
 Or PBS status command:
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/fb197958-e590-4879-b1e7-21b64d5d345e)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/fb197958-e590-4879-b1e7-21b64d5d345e)
 
 8. Using the VSCode command palette, start the "Remote-SSH" extension and
 select the `devcloud-vscode` option.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/2911875a-cc86-452b-98a9-f189c223073b)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/2911875a-cc86-452b-98a9-f189c223073b)
 
 You should now be in your DevCloud home folder in an interactive computer node.
 
