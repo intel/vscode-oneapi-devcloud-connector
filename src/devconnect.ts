@@ -152,7 +152,7 @@ export class DevConnect {
 
     private async setShell(): Promise<boolean> {
         if (process.platform === 'win32') {
-            if (!await this.findCygwinPath()) {
+            if (!await this.checkCygwinPath()) {
                 return false;
             }
             this.shellPath = join(this.cygwinFolderPath, `bin`, `bash.exe`);
@@ -166,29 +166,13 @@ export class DevConnect {
         return true;
     }
 
-    private async findCygwinPath(): Promise<boolean> {
-        if (this._cygwinPath) {
-            if (existsSync(this._cygwinPath)) {
-                this.cygwinFolderPath = this._cygwinPath;
-                return true;
-            } else {
-                vscode.window.showWarningMessage(`Path to the cygwin folder specified in settings is invalid and was ignored.`);
-            }
+    private async checkCygwinPath(): Promise<boolean> {
+        if (!this._cygwinPath || !existsSync(this._cygwinPath)) {
+            vscode.window.showErrorMessage(`Path to the cygwin folder specified in settings is invalid.`, { modal: true });
+            return false;
         }
-        if (existsSync(`C:\\cygwin64`)) {
-            this.cygwinFolderPath = 'C:\\cygwin64';
-            return true;
-        } else {
-            vscode.window.showInformationMessage(`Could not find path to cygwin bash. Provide it yourself.`);
-            const uri = (await vscode.window.showOpenDialog({ canSelectFolders: true, canSelectFiles: false, canSelectMany: false }));
-
-            if (!uri) {
-                vscode.window.showErrorMessage("Failed to find a path to cygwin", { modal: true });
-                return false;
-            }
-            this.cygwinFolderPath = uri[0].fsPath;
-            return true;
-        }
+        this.cygwinFolderPath = this._cygwinPath;
+        return true;
     }
 
     private async connectToHeadNode(): Promise<boolean> {
