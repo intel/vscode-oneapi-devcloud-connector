@@ -177,7 +177,12 @@ extension or via "Devcloud Terminal" in currect window
 7. Connect with "New DevCloud Terminal"
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/25a56873-8020-4d07-b7a7-9218796e49ef)
 
-New DevCloud terminal will be created to work in command line on DevCloud
+New DevCloud terminal will be created to work in command line on DevCloud. Terminal provides all possibilities to work with oneAPI or PBS commands. 
+For example oneAPI sample aggregator:
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/774e0d0c-83c5-4f8d-bef6-37ed0d64f307)
+
+Or PBS status command:
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/fb197958-e590-4879-b1e7-21b64d5d345e)
 
 8. Using the VSCode command palette, start the "Remote-SSH" extension and
 select the `devcloud-vscode` option.
