@@ -161,17 +161,23 @@ seconds. They are named: `devcloudService1` and `devcloudService2`
 connection to the oneAPI DevCloud. Do not close them during your DevCloud
 session; closing them will interrupt your SSH connection to DevCloud!
 
-6. The second terminal may ask you to add an SSH key fingerprint - type "yes"
+5. The second terminal may ask you to add an SSH key fingerprint - type "yes"
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/0bde8ba6-90e0-42b2-a750-c047c11c75d0)
 
 > NOTE: Do not type anything else in the service terminals.
 
-7. If the connection setup is successful, a corresponding message will appear
-and you can connect to the compute node on DevCloud via the VSCode Remote-SSH
-extension.
+6. If the connection setup is successful, a corresponding message will appear
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/11194224-0d41-4a1d-b440-dbc5291caf1e)
+
+and you can connect to the compute node on DevCloud via the VSCode Remote-SSH
+extension or via "Devcloud Terminal" in currect window
+
+7. Connect with "New DevCloud Terminal"
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/25a56873-8020-4d07-b7a7-9218796e49ef)
+
+New DevCloud terminal will be created to work in command line on DevCloud
 
 8. Using the VSCode command palette, start the "Remote-SSH" extension and
 select the `devcloud-vscode` option.
