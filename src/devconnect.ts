@@ -88,7 +88,7 @@ export class DevConnect {
         }
         if (! await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
-            title: "Connecting to specific node...",
+            title: "Connecting to compute node...",
             cancellable: true
         }, async (_progress, token) => {
             token.onCancellationRequested(() => {
