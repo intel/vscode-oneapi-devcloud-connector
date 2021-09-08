@@ -169,7 +169,7 @@ session; closing them will interrupt your SSH connection to DevCloud!
 
 6. If the connection setup is successful, a corresponding message will appear
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/11194224-0d41-4a1d-b440-dbc5291caf1e)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/3b791025-cb14-41dc-9046-087fe867b6c4)
 
 and you can connect to the compute node on DevCloud via the VSCode Remote-SSH
 extension or via "Devcloud Terminal" in currect window
