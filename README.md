@@ -141,19 +141,18 @@ To install the vsix file:
 
 ## Use the Extension
 
-1. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
-2. Type **DevCloud** and select `Intel DevCloud: Setup connection`
+1. Check the extension settings
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/52ce803a-c520-4e50-83f3-518ba5349f72)
+
+2. Set connection and VSCode session settings if needed
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/644f0443-6aa5-428d-b27b-de2922eca837)
+
+3. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
+. Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/22faa42a-cb5c-43ab-b37e-f7ad63f37e6c)
 
-3. You may be asked “Are you connecting via proxy?” If you use direct Internet access, select “No”. If you are behind an SSH proxy, select "Yes".
-
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/3c45a5b8-7cbc-45d3-880d-2fd7c1feba08)
-
-4.You will then be prompted to set a timeout for the job. To use the default value press ESC
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/81574619/8c2872a2-1fd7-4e2f-b36c-ccdb4f29e92b)
-
-5. Two service terminals will be created within an interval of several
+4. Two service terminals will be created within an interval of several
 seconds. They are named: `devcloudService1` and `devcloudService2`
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/d2bf8f12-3fd7-41ae-b262-2247ace75f26)
@@ -188,17 +187,13 @@ You should now be in your DevCloud home folder in an interactive computer node.
 
 To close your connection to the oneAPI DevCloud and kill your interactive session:
 
-* Close the DevCloud VSCode Remote-SSH window.
+* Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
+. Type **DevCloud** and select `Intel DevCloud: Close connection` or
 
-* Close both service terminals:
+* Close VSCode window with extension
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connect/assets/40661523/329e8f4f-1bb1-4ee8-9a3b-fd06ba436311)
+
 
 
 ## Known Issues
 
-* Do not create two or more connections at the same time. This case is not
-supported at this time.
-
-* If you have any alive PBS jobs on Devcloud (running or in the job queue),
-this extension will not connect to Devcloud.
