@@ -182,11 +182,14 @@ export class DevConnect {
         this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1`, shellPath: this.shellPath, shellArgs: firsrtShellArgs, message: message });
 
         if (process.platform !== 'win32') {
-            this.firstTerminal.sendText(`ssh devcloud${this._proxy === true ? ".proxy" : ""} &> ${this.firstLog}`);
+            this.firstTerminal.sendText(`ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.firstLog}`);
         }
 
         if (!await this.checkConnection(this.firstLog, this.firstTerminal)) {
-            vscode.window.showErrorMessage("Failed to connect to head node", { modal: true });
+            vscode.window.showErrorMessage("Failed to connect to head node. Possible fixes:\n\n\
+* Check your VPN status. Turn it off\n\
+* Check your proxy setting in extension settings\n\
+* Try to increase connection timeout in extension settings", { modal: true });
             return false;
         }
 
@@ -217,7 +220,7 @@ export class DevConnect {
             vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
             return false;
         }
-        vscode.window.showInformationMessage(`Created tunnel to node ${this.nodeName}.\n Now you can connect to devcloud via Remote - SSH.\n Use host devcloud-vscode`, { modal: true });
+        vscode.window.showInformationMessage(`Ready to use Remote-SSH and connect with the devcloud-vscode ssh target.\nReady to start New DevCloud terminal\nDO NOT close the "devcloudService" terminals while connected to DevCloud using the VSCode Remote-SSH extension or DevCloud terminal`, { modal: true });
         this._isConnected = true;
         return true;
     }
