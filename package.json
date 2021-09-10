@@ -58,7 +58,7 @@
       },
       {
         "command": "intel-corporation.vscode-oneapi-devcloud-connector.devcloudTerminal",
-        "title": "Intel DevCloud: New Devcloud terminal"
+        "title": "Intel DevCloud: New DevCloud terminal"
       }
     ]
   },
