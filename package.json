@@ -17,7 +17,7 @@
   "contributes": {
     "configuration": [
       {
-        "title": "DevCloud Connector for Intel® oneAPI Toolkitsd",
+        "title": "DevCloud Connector for Intel® oneAPI Toolkits",
         "properties": {
           "intel-corporation.vscode-oneapi-devcloud-connector.proxy": {
             "type": "boolean",
