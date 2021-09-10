@@ -62,7 +62,7 @@ extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote
 
 * Create a oneAPI DevCloud account and [setup your SSH config file.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 
-### If you are behind an SSH proxy
+### If you are behind an SSH proxy (Windows and Linux)
 
 Modify ~/.ssh/config as below
 ```
