@@ -3,6 +3,7 @@
   "displayName": "DevCloud Connector for Intel® oneAPI Toolkits",
   "description": "Simplifies connecting to Intel oneAPI DevCloud",
   "version": "0.0.6",
+  "license": "MIT",
   "publisher": "intel-corporation",
   "engines": {
     "vscode": "^1.58.1"
