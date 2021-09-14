@@ -173,18 +173,17 @@ extension or by using the DevCloud terminal.
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/9a02807d-8382-4674-969d-53d61e8e0312)
 
 The DevCloud terminal can use any of the command line operations supported by Intel® oneAPI Toolkits. For example, to browse samples, enter `oneapi-cli`:
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/25a56873-8020-4d07-b7a7-9218796e49ef)
 
-
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/774e0d0c-83c5-4f8d-bef6-37ed0d64f307)
-
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/df0c5ab6-2c4d-49c8-b8d9-b5512bc7df4e)
 
 After running a sample, you can use PBS to check the status of your project:
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/fb197958-e590-4879-b1e7-21b64d5d345e)
+
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/bdc6edeb-47a5-4394-ab19-338251a60862)
+
 
 8. Instead of using the command line, you can use the command palette to start the "Remote-SSH" extension and select the  `devcloud-vscode` option.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/2911875a-cc86-452b-98a9-f189c223073b)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/ffb5ee21-2b50-48c3-8458-57b6c8354fda)
 
 You should now be in your DevCloud home folder in an interactive computer node.
 
