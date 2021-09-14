@@ -157,18 +157,22 @@ session; closing them will interrupt your SSH connection to the DevCloud.
 
 5. The second terminal may ask you to add an SSH key fingerprint - type "yes".
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/0bde8ba6-90e0-42b2-a750-c047c11c75d0)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/7af4d365-5bac-4e5c-a8ea-2b10dee2e1e2)
 
 > NOTE: Do not type anything else in the service terminals.
 
 6. If the connection setup is successful, a corresponding message will appear:
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/3b791025-cb14-41dc-9046-087fe867b6c4)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/d6dafcc7-d732-4770-950a-2c9aa4d725f0)
 
 Connect to the compute node on DevCloud using the Remote-SSH
 extension or by using the DevCloud terminal.
 
-7. The DevCloud terminal can use any of the command line operations supported by Intel® oneAPI Toolkits. For example, to browse samples, enter `oneapi-cli`:
+7. To run DevCloud terminal you should type Ctrl+Shift+P and choose "Intel DevCloud: New DevCloud Terminal"
+
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/9a02807d-8382-4674-969d-53d61e8e0312)
+
+The DevCloud terminal can use any of the command line operations supported by Intel® oneAPI Toolkits. For example, to browse samples, enter `oneapi-cli`:
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/25a56873-8020-4d07-b7a7-9218796e49ef)
 
 
