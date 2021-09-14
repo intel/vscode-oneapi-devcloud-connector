@@ -144,12 +144,12 @@ command.
 3. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/22faa42a-cb5c-43ab-b37e-f7ad63f37e6c)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/8e5a5794-bf84-4c67-b720-e2c9e9db45c0)
 
 4. Two service terminals will be created with the names: `devcloudService1` and `devcloudService2`. It may take several seconds to create the terminals.
 
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/4e17b31d-7f5b-44a2-a7a8-f54e2a0a20ae)
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/d2bf8f12-3fd7-41ae-b262-2247ace75f26)
 
 > NOTE: These are service terminals that are being used to facilite your
 connection to the oneAPI DevCloud. Do not close them during your DevCloud
