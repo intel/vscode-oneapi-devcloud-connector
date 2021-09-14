@@ -135,7 +135,7 @@ command.
 
 1. Check the extension settings.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/e093b445-3cb6-4553-abe5-e083653c7ad4)
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/9c16c11d-c8d6-443e-8852-82ff4443570d)
 
 2. Set connection and Visual Studio Code session settings if needed.
 
