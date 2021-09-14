@@ -125,27 +125,21 @@ terminal on Windows; bash terminal on Linux) and run the `ssh devcloud`
 command.
 
 
-### Install this DevCloud Connection Extension from a VSIX File
+###	Install DevCloud Connector for Intel® oneAPI Toolkits from the Visual Studio Marketplace*
+1.	Click the left menu icon for Extensions
+2.	Search for DevCloud Connector for Intel® oneAPI Toolkits
 
-Download the latest vsix file from [the releases
-page.](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/releases)
-
-To install the vsix file:
-
-* Click the left menu icon for Extensions (1)
-* Click button "..." (2)
-* Click "Install from VSIX..." button (3)
-
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/assets/40661523/f173026a-33b4-44bc-b9b0-702ffc9d33e3)
 
 
 ## Use the Extension
 
 1. Check the extension settings.
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/52ce803a-c520-4e50-83f3-518ba5349f72)
+
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/e093b445-3cb6-4553-abe5-e083653c7ad4)
 
 2. Set connection and Visual Studio Code session settings if needed.
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connectoror/assets/40661523/644f0443-6aa5-428d-b27b-de2922eca837)
+
+![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/3be68326-903b-4c2c-9e29-bd873cf99c99)
 
 3. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 Type **DevCloud** and select `Intel DevCloud: Setup connection`
