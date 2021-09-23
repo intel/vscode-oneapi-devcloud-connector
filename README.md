@@ -7,7 +7,7 @@
 [vsix-docs]:   <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector#readme>
 
 
-#### | [oneAPI Code Samples][oneapi-samples] | [oneAPI VSCode Extensions][oneapi-samples] | [Intel VSCode Extensions][intel-extensions] |
+#### | [oneAPI Code Samples][oneapi-samples] | [oneAPI VS Code Extensions][oneapi-samples] | [Intel VS Code Extensions][intel-extensions] |
 
 [oneapi-samples]:    <https://github.com/oneapi-src/oneAPI-samples>
 [oneapi-extensions]: <https://marketplace.visualstudio.com/search?term=oneapi&target=VSCode>
@@ -15,18 +15,18 @@
 
 ***
 
-This extension assists with configuring and establishing a VSCode Remote-SSH
+This extension assists with configuring and establishing a VS Code Remote-SSH
 connection to the [Intel® DevCloud](https://devcloud.intel.com/oneapi/)
 development environment.
 
-The Intel® DevCloud cluster does not support VSCode Remote-SSH connections
+The Intel® DevCloud cluster does not support VS Code Remote-SSH connections
 into the cluster's "login node." However, by creating an SSH tunnel you can
-establish a VSCode Remote-SSH session with a Intel® DevCloud "compute node."
+establish a VS Code Remote-SSH session with a Intel® DevCloud "compute node."
 This extension will help you locate and reserve a compute node and establish
-an interactive VSCode Remote-SSH session with that compute node.
+an interactive VS Code Remote-SSH session with that compute node.
 
 Without this extension you must perform a [series of manual
-steps][manual-remote-ssh] to create the SSH tunnel and an interactive VSCode
+steps][manual-remote-ssh] to create the SSH tunnel and an interactive VS Code
 Remote-SSH connection to a Intel® DevCloud compute node.
 
 [manual-remote-ssh]: <https://devcloud.intel.com/oneapi/documentation/connect-with-vscode>
