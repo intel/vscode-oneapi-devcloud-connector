@@ -199,7 +199,10 @@ To close your connection to the Intel® DevCloud and kill your interactive sessi
 
 * Close Visual Studio Code window with extension.
 
+## License
+This extension is released under the MIT License.
 
+*Other names and brands may be claimed as the property of others.
 
 
 ## Known Issues
