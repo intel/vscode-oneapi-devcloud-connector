@@ -227,7 +227,7 @@ export class DevConnect {
             vscode.window.showErrorMessage("Failed to create tunnel to compute node", { modal: true });
             return false;
         }
-        vscode.window.showInformationMessage(`Ready to use Remote-SSH and connect with the devcloud-vscode ssh target.\nReady to start New DevCloud terminal\nDO NOT close the "devcloudService" terminals while connected to DevCloud using the VSCode Remote-SSH extension or DevCloud terminal`, { modal: true });
+        vscode.window.showInformationMessage(`Ready to use Remote-SSH and connect with the devcloud-vscode ssh target.\nReady to start New DevCloud terminal\nDO NOT close the "devcloudService" terminals while connected to DevCloud using the VS Code Remote-SSH extension or DevCloud terminal`, { modal: true });
         this._isConnected = true;
         return true;
     }
