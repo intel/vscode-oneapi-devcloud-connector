@@ -152,7 +152,7 @@ Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
 
 > NOTE: These are service terminals that are being used to facilite your
-connection to the oneAPI DevCloud. Do not close them during your DevCloud
+connection to the Intel® DevCloud. Do not close them during your DevCloud
 session; closing them will interrupt your SSH connection to the DevCloud.
 
 5. The second terminal may ask you to add an SSH key fingerprint - type "yes".
@@ -192,7 +192,7 @@ You should now be in your DevCloud home folder in an interactive computer node.
 
 ## End the Connection
 
-To close your connection to the oneAPI DevCloud and kill your interactive session:
+To close your connection to the Intel® DevCloud and kill your interactive session:
 
 * Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 . Type **DevCloud** and select `Intel DevCloud: Close connection` or
