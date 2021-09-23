@@ -36,14 +36,14 @@ Remote-SSH connection to a Intel® DevCloud compute node.
 
 ## Prerequisites:
 
-* Windows 10 or Linux Ubuntu 18 (currently tested platforms).
+* Windows 10 or Linux Ubuntu 18.04/20.04 (currently tested platforms).
 
 * Turn off your VPN (connecting via a VPN is not supported).
 
 
 ### Windows SSH Setup (Direct Internet access)
 
-* Install VSCode 1.58.1 or later and install the [Remote-SSH
+* Install VS Code 1.58.1 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 * [Install
@@ -52,12 +52,12 @@ into the C:\cygwin64 folder. Automated installation is recommended. Make sure
 that ssh.exe and nc.exe are present in the /cygwin64/bin folder.
 
 * Create a Intel® DevCloud account and setup your SSH config file and ssh.exe
-Cygwin client [for use with the VSCode Remote-SSH
+Cygwin client [for use with the VS Code Remote-SSH
 extension.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 
 ### Linux SSH Setup (Direct Internet access)
 
-* Install VSCode 1.58.1 or later and install the [Remote-SSH
+* Install VS Code 1.58.1 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 * Create a Intel® DevCloud account and [setup your SSH config file.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
