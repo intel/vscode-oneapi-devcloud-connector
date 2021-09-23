@@ -120,7 +120,7 @@ export class DevConnect {
         this.secondTerminal?.dispose();
 
         this._isConnected = false;
-        vscode.window.showInformationMessage('Connection to devcloud closed');
+        vscode.window.showInformationMessage('Connection to DevCloud closed');
         return;
     }
 
@@ -379,7 +379,7 @@ export class DevConnect {
     private async getUserNameFromConfig(config: string): Promise<boolean> {
         const idx1 = config.indexOf(`Host devcloud`);
         if (idx1 < 0) {
-            vscode.window.showErrorMessage(`ssh config doesn't contain devcloud host`, { modal: true });
+            vscode.window.showErrorMessage(`ssh config doesn't contain DevCloud host`, { modal: true });
             return false;
         }
         const idx2 = config.indexOf(`User`, idx1);
