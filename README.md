@@ -36,7 +36,7 @@ Remote-SSH connection to a Intel® DevCloud compute node.
 
 ## Prerequisites:
 
-* Windows 10 or Linux Ubuntu 18.04/20.04 (currently tested platforms).
+* Windows* 10 or Linux Ubuntu* 18.04/20.04 (currently tested platforms).
 
 * Turn off your VPN (connecting via a VPN is not supported).
 
@@ -47,7 +47,7 @@ Remote-SSH connection to a Intel® DevCloud compute node.
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 * [Install
-Cygwin](https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin)
+Cygwin*](https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin)
 into the C:\cygwin64 folder. Automated installation is recommended. Make sure
 that ssh.exe and nc.exe are present in the /cygwin64/bin folder.
 
