@@ -51,7 +51,7 @@ Cygwin](https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows
 into the C:\cygwin64 folder. Automated installation is recommended. Make sure
 that ssh.exe and nc.exe are present in the /cygwin64/bin folder.
 
-* Create a oneAPI DevCloud account and setup your SSH config file and ssh.exe
+* Create a Intel® DevCloud account and setup your SSH config file and ssh.exe
 Cygwin client [for use with the VSCode Remote-SSH
 extension.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 
@@ -60,7 +60,7 @@ extension.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 * Install VSCode 1.58.1 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
-* Create a oneAPI DevCloud account and [setup your SSH config file.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
+* Create a Intel® DevCloud account and [setup your SSH config file.](https://devcloud.intel.com/oneapi/documentation/connect-with-vscode)
 
 ### If you are behind an SSH proxy (Windows and Linux)
 
@@ -118,7 +118,7 @@ chmod 600 ~/.ssh/devcloud-access-key-<user>.txt
 chmod 600 ~/.ssh/config
 ```
 
-### Check Your Connection to the DevCloud Login Node
+### Check Your Connection to the Intel® DevCloud Login Node
 
 To be sure that your ssh setup is correct, open a terminal session (Cygwin
 terminal on Windows; bash terminal on Linux) and run the `ssh devcloud`
