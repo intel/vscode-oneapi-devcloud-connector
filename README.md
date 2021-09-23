@@ -126,27 +126,27 @@ command.
 
 
 ###	Install DevCloud Connector for Intel® oneAPI Toolkits from the Visual Studio Marketplace*
-1.	Click the left menu icon for Extensions
-2.	Search for DevCloud Connector for Intel® oneAPI Toolkits
+*	Click the left menu icon for Extensions
+*	Search for DevCloud Connector for Intel® oneAPI Toolkits
 
 
 
 ## Use the Extension
 
-1. Check the extension settings.
+* Check the extension settings.
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/9c16c11d-c8d6-443e-8852-82ff4443570d)
 
-2. Set connection and Visual Studio Code session settings if needed.
+* Set connection and Visual Studio Code session settings if needed.
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/3be68326-903b-4c2c-9e29-bd873cf99c99)
 
-3. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
+* Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/8e5a5794-bf84-4c67-b720-e2c9e9db45c0)
 
-4. Two service terminals will be created with the names: `devcloudService1` and `devcloudService2`. It may take several seconds to create the terminals.
+* Two service terminals will be created with the names: `devcloudService1` and `devcloudService2`. It may take several seconds to create the terminals.
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/4e17b31d-7f5b-44a2-a7a8-f54e2a0a20ae)
 
@@ -155,20 +155,20 @@ Type **DevCloud** and select `Intel DevCloud: Setup connection`
 connection to the Intel® DevCloud. Do not close them during your DevCloud
 session; closing them will interrupt your SSH connection to the DevCloud.
 
-5. The second terminal may ask you to add an SSH key fingerprint - type "yes".
+* The second terminal may ask you to add an SSH key fingerprint - type "yes".
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/7af4d365-5bac-4e5c-a8ea-2b10dee2e1e2)
 
 > NOTE: Do not type anything else in the service terminals.
 
-6. If the connection setup is successful, a corresponding message will appear:
+* If the connection setup is successful, a corresponding message will appear:
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/d6dafcc7-d732-4770-950a-2c9aa4d725f0)
 
 Connect to the compute node on DevCloud using the Remote-SSH
 extension or by using the DevCloud terminal.
 
-7. To run DevCloud terminal you should type Ctrl+Shift+P and choose "Intel DevCloud: New DevCloud Terminal"
+* To run DevCloud terminal you should type Ctrl+Shift+P and choose "Intel DevCloud: New DevCloud Terminal"
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/9a02807d-8382-4674-969d-53d61e8e0312)
 
@@ -181,13 +181,13 @@ After running a sample, you can use PBS to check the status of your project:
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/bdc6edeb-47a5-4394-ab19-338251a60862)
 
 
-8. Instead of using the command line, you can use the command palette to start the "Remote-SSH" extension and select the  `devcloud-vscode` option.
+* Instead of using the command line, you can use the command palette to start the "Remote-SSH" extension and select the  `devcloud-vscode` option.
 
 ![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/ffb5ee21-2b50-48c3-8458-57b6c8354fda)
 
 You should now be in your DevCloud home folder in an interactive computer node.
 
-9. For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
+* For access to documentation type Ctrl+Shift+P and find command `Intel Devcloud: Get Help`
 
 
 ## End the Connection
