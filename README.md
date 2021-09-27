@@ -2,7 +2,7 @@
 
 #### | [Repository][vsix-repo] | [Issues][vsix-issues] | [Documentation][vsix-docs] |
 
-[vsix-repo]:   <https://github.com/intel/vscode-vscode-oneapi-devcloud-connector>
+[vsix-repo]:   <https://github.com/intel/vscode-oneapi-devcloud-connector>
 [vsix-issues]: <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/issues>
 [vsix-docs]:   <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector#readme>
 
