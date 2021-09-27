@@ -15,7 +15,7 @@
 
 ***
 
-This extension assists with configuring and establishing a VS Code Remote-SSH
+This extension assists with configuring and establishing a Visual Studio Code* (VS Code) Remote-SSH
 connection to the [Intel® DevCloud](https://devcloud.intel.com/oneapi/)
 development environment.
 
