@@ -1,7 +1,7 @@
 # Change Log
-
+- Added readme fixes
 # 0.07
-- Added possible fixes if connection failed
+- Added some fixes if connection failed
 # 0.06
 - Added readme fixes
 # 0.05
