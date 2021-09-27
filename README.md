@@ -31,7 +31,7 @@ an interactive VS Code Remote-SSH session with that compute node. You also can u
 
 ## Prerequisites:
 
-* Windows* 10 or Linux Ubuntu* 18.04/20.04 (currently tested platforms).
+* Windows* 10 or Linux* Ubuntu* 18.04/20.04 (currently tested platforms).
 
 * Turn off your VPN (connecting via a VPN is not supported).
 
