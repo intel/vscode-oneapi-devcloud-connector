@@ -7,7 +7,7 @@
 [vsix-docs]:   <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector#readme>
 
 
-#### | [oneAPI Code Samples][oneapi-samples] | [oneAPI VS Code Extensions][oneapi-samples] | [Intel VS Code Extensions][intel-extensions] |
+#### | [oneAPI Code Samples][oneapi-samples] | [oneAPI VS Code Extensions][oneapi-extensions] | [Intel VS Code Extensions][intel-extensions] |
 
 [oneapi-samples]:    <https://github.com/oneapi-src/oneAPI-samples>
 [oneapi-extensions]: <https://marketplace.visualstudio.com/search?term=oneapi&target=VSCode>
