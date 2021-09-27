@@ -3,8 +3,8 @@
 #### | [Repository][vsix-repo] | [Issues][vsix-issues] | [Documentation][vsix-docs] |
 
 [vsix-repo]:   <https://github.com/intel/vscode-oneapi-devcloud-connector>
-[vsix-issues]: <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector/issues>
-[vsix-docs]:   <https://github.com/intel-innersource/frameworks.ide.vscode.extensions.vscode-oneapi-devcloud-connector#readme>
+[vsix-issues]: <https://github.com/intel/vscode-oneapi-devcloud-connector/issues>
+[vsix-docs]:   <https://github.com/intel/vscode-oneapi-devcloud-connector#readme>
 
 
 #### | [oneAPI Code Samples][oneapi-samples] | [oneAPI VS Code Extensions][oneapi-extensions] | [Intel VS Code Extensions][intel-extensions] |
