@@ -23,13 +23,8 @@ The Intel® DevCloud cluster does not support VS Code Remote-SSH connections
 into the cluster's "login node." However, by creating an SSH tunnel you can
 establish a VS Code Remote-SSH session with a Intel® DevCloud "compute node."
 This extension will help you locate and reserve a compute node and establish
-an interactive VS Code Remote-SSH session with that compute node.
-
-Without this extension you must perform a [series of manual
-steps][manual-remote-ssh] to create the SSH tunnel and an interactive VS Code
-Remote-SSH connection to a Intel® DevCloud compute node.
-
-[manual-remote-ssh]: <https://devcloud.intel.com/oneapi/documentation/connect-with-vscode>
+an interactive VS Code Remote-SSH session with that compute node. You also can use 
+"DevCloud Terminal" in this extension after establishing connection to "compute node" to work in command line.
 
 ***
 
