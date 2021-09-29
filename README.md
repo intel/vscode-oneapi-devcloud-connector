@@ -130,7 +130,8 @@ command.
 
 * Check the extension settings.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/9c16c11d-c8d6-443e-8852-82ff4443570d)
+![image](https://user-images.githubusercontent.com/40661523/135318348-dc953dad-da81-4b96-9d21-3f6ca28bf57d.png)
+
 
 * Set connection and Visual Studio Code session settings if needed.
 
