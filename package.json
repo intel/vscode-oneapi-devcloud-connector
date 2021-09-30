@@ -87,6 +87,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/intel/vscode-oneapi-devcloud-connect.git"
+    "url": "https://github.com/intel/vscode-oneapi-devcloud-connector.git"
 }
 }
