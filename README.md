@@ -135,16 +135,16 @@ command.
 
 * Set connection and Visual Studio Code session settings if needed.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/3be68326-903b-4c2c-9e29-bd873cf99c99)
+![image](https://user-images.githubusercontent.com/40661523/135393776-744c8743-fd12-4013-8302-a83967087bae.png)
 
 * Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/8e5a5794-bf84-4c67-b720-e2c9e9db45c0)
+![image](https://user-images.githubusercontent.com/40661523/135393974-f7185619-dd48-48e1-b8f1-95947133b101.png)
 
 * Two service terminals will be created with the names: `devcloudService1` and `devcloudService2`. It may take several seconds to create the terminals.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/4e17b31d-7f5b-44a2-a7a8-f54e2a0a20ae)
+![image](https://user-images.githubusercontent.com/40661523/135394093-f637eeb4-3ed8-4516-b2a7-22d77727f60b.png)
 
 
 > NOTE: These are service terminals that are being used to facilite your
@@ -153,33 +153,33 @@ session; closing them will interrupt your SSH connection to the DevCloud.
 
 * The second terminal may ask you to add an SSH key fingerprint - type "yes".
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/7af4d365-5bac-4e5c-a8ea-2b10dee2e1e2)
+![image](https://user-images.githubusercontent.com/40661523/135394167-f13a1d95-d2aa-4748-9593-a42cfcf6ada0.png)
 
 > NOTE: Do not type anything else in the service terminals.
 
 * If the connection setup is successful, a corresponding message will appear:
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/d6dafcc7-d732-4770-950a-2c9aa4d725f0)
+![image](https://user-images.githubusercontent.com/40661523/135394228-97ef8e55-69e8-4d23-9e7e-3188231c99d9.png)
 
 Connect to the compute node on DevCloud using the Remote-SSH
 extension or by using the DevCloud terminal.
 
 * To run DevCloud terminal you should type Ctrl+Shift+P and choose "Intel DevCloud: New DevCloud Terminal"
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/9a02807d-8382-4674-969d-53d61e8e0312)
+![image](https://user-images.githubusercontent.com/40661523/135394337-85ca5e0a-9e82-477a-8e48-b468705e7ba4.png)
 
 The DevCloud terminal can use any of the command line operations supported by Intel® oneAPI Toolkits. For example, to browse samples, enter `oneapi-cli`:
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/df0c5ab6-2c4d-49c8-b8d9-b5512bc7df4e)
+![image](https://user-images.githubusercontent.com/40661523/135394434-5f8abc51-1609-4042-87d3-db0b78d06bf5.png)
 
 After running a sample, you can use PBS to check the status of your project:
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/bdc6edeb-47a5-4394-ab19-338251a60862)
+![image](https://user-images.githubusercontent.com/40661523/135394472-c13c29d6-2a69-4362-84f9-3d56558c0feb.png)
 
 
 * Instead of using the command line, you can use the command palette to start the "Remote-SSH" extension and select the  `devcloud-vscode` option.
 
-![image](https://github.com/intel-innersource/frameworks.ide.vscode.extensions.oneapi-devcloud-connector/assets/40661523/ffb5ee21-2b50-48c3-8458-57b6c8354fda)
+![image](https://user-images.githubusercontent.com/40661523/135394536-41087ed3-ff34-415a-a704-2593abdc9675.png)
 
 You should now be in your DevCloud home folder in an interactive computer node.
 
