@@ -2,7 +2,7 @@
   "name": "vscode-oneapi-devcloud-connector",
   "displayName": "DevCloud Connector for Intel® oneAPI Toolkits",
   "description": "Simplifies connecting to Intel® DevCloud",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "license": "MIT",
   "icon": "media/oneapi-logo.png",
   "publisher": "intel-corporation",
