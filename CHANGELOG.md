@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.1
+
+Readme fixes
+
+## 0.09
+
+Readme fixes
+
+## 0.08
+
+Readme fixes
+
 ## 0.07
 
 - Added readme fixes
