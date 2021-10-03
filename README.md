@@ -179,7 +179,8 @@ After running a sample, you can use PBS to check the status of your project:
 
 * Instead of using the command line, you can use the command palette to start the "Remote-SSH" extension and select the  `devcloud-vscode` option.
 
-![image](https://user-images.githubusercontent.com/40661523/135394536-41087ed3-ff34-415a-a704-2593abdc9675.png)
+![image](https://user-images.githubusercontent.com/40661523/135768179-cdfc2901-57e2-47b5-8cd2-b3540234672b.png)
+
 
 You should now be in your DevCloud home folder in an interactive computer node.
 
