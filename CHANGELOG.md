@@ -1,4 +1,7 @@
 # Change Log
+## 0.1.2
+
+- Updated lock files
 
 ## 0.1.1
 
