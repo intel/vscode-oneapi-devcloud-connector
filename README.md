@@ -79,7 +79,7 @@ ProxyCommand nc -x <proxy_name>:<port> %h %p
 ################################################################################################
 
 ################################################################################################
-# DevCloud VSCode config
+# DevCloud VS Code config
 ################################################################################################
 Host devcloud-vscode
 UserKnownHostsFile /dev/null
@@ -130,21 +130,20 @@ command.
 
 * Check the extension settings.
 
-![image](https://user-images.githubusercontent.com/40661523/135318348-dc953dad-da81-4b96-9d21-3f6ca28bf57d.png)
-
+![image](media/use_the_ext1.png)
 
 * Set connection and Visual Studio Code session settings if needed.
 
-![image](https://user-images.githubusercontent.com/40661523/135393776-744c8743-fd12-4013-8302-a83967087bae.png)
+![image](media/use_the_ext2.png)
 
 * Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
-![image](https://user-images.githubusercontent.com/40661523/135393974-f7185619-dd48-48e1-b8f1-95947133b101.png)
+![image](media/use_the_ext3.png)
 
 * Two service terminals will be created with the names: `devcloudService1` and `devcloudService2`. It may take several seconds to create the terminals.
 
-![image](https://user-images.githubusercontent.com/40661523/135394093-f637eeb4-3ed8-4516-b2a7-22d77727f60b.png)
+![image](media/use_the_ext4.png)
 
 
 > NOTE: These are service terminals that are being used to facilite your
@@ -153,34 +152,33 @@ session; closing them will interrupt your SSH connection to the DevCloud.
 
 * The second terminal may ask you to add an SSH key fingerprint - type "yes".
 
-![image](https://user-images.githubusercontent.com/40661523/135394167-f13a1d95-d2aa-4748-9593-a42cfcf6ada0.png)
+![image](media/use_the_ext5.png)
 
 > NOTE: Do not type anything else in the service terminals.
 
 * If the connection setup is successful, a corresponding message will appear:
 
-![image](https://user-images.githubusercontent.com/40661523/135394228-97ef8e55-69e8-4d23-9e7e-3188231c99d9.png)
+![image](media/use_the_ext6.png)
 
 Connect to the compute node on DevCloud using the Remote-SSH
 extension or by using the DevCloud terminal.
 
 * To run DevCloud terminal you should type Ctrl+Shift+P and choose "Intel DevCloud: New DevCloud Terminal"
 
-![image](https://user-images.githubusercontent.com/40661523/135394337-85ca5e0a-9e82-477a-8e48-b468705e7ba4.png)
+![image](media/use_the_ext7.png)
 
 The DevCloud terminal can use any of the command line operations supported by Intel® oneAPI Toolkits. For example, to browse samples, enter `oneapi-cli`:
 
-![image](https://user-images.githubusercontent.com/40661523/135394434-5f8abc51-1609-4042-87d3-db0b78d06bf5.png)
+![image](media/use_the_ext8.png)
 
 After running a sample, you can use PBS to check the status of your project:
 
-![image](https://user-images.githubusercontent.com/40661523/135394472-c13c29d6-2a69-4362-84f9-3d56558c0feb.png)
+![image](media/use_the_ext9.png)
 
 
 * Instead of using the command line, you can use the command palette to start the "Remote-SSH" extension and select the  `devcloud-vscode` option.
 
-![image](https://user-images.githubusercontent.com/40661523/135768179-cdfc2901-57e2-47b5-8cd2-b3540234672b.png)
-
+![image](media/use_the_ext10.png)
 
 You should now be in your DevCloud home folder in an interactive computer node.
 
