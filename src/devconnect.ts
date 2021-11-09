@@ -31,6 +31,7 @@ export class DevConnect {
     private _connectionTimeout: number | undefined;
     private _jobTimeout: string | undefined;
     private _cygwinPath: string | undefined;
+    private _nodeDevice: string | undefined;
 
     public set isConnected(isConnected: boolean) {
         this._isConnected = isConnected;
@@ -65,6 +66,14 @@ export class DevConnect {
             this._cygwinPath = undefined;
         } else {
             this._cygwinPath = posix.normalize(sshPath.replace(`\r`, "")).split(/[\\\/]/g).join(posix.sep);
+        }
+    }
+
+    public set nodeDevice(device: string | undefined) {
+        if (device === undefined || device?.length === 0) {
+            this._nodeDevice = undefined;
+        } else {
+            this._nodeDevice = device;
         }
     }
 
@@ -200,12 +209,14 @@ export class DevConnect {
             return false;
         }
 
-        const qsubOptions = `qsub -I ${this._jobTimeout !== undefined ? `-l walltime=${this._jobTimeout}` : ``}`;
+        const qsubOptions = `qsub -I -l nodes=1:${this._nodeDevice}:ppn=2 ${this._jobTimeout !== undefined ? `-l walltime=${this._jobTimeout}` : ``} -N vscode`;
         this.firstTerminal.sendText(qsubOptions);
         this.firstTerminal.sendText(`qstat -f`);
 
         if (!await this.getJobID(this.firstLog)) {
-            await vscode.window.showErrorMessage("There is already a job in the qsub queue. The extension will not be able to work until they complete.", { modal: true });
+            await vscode.window.showErrorMessage("Failed to create interactive job. Possible reasons:\n\n\
+            * Interactive job in PBS queue. Wait for your running tasks to complete\n\
+            * There is no available node with requested device", { modal: true });
             return false;
         }
         return true;

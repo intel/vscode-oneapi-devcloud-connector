@@ -18,6 +18,7 @@ export function activate(context: vscode.ExtensionContext): void {
 	devcloud.connectionTimeout = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<number>('connection_timeout');
 	devcloud.jobTimeout = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<string>('session_timeout');
 	devcloud.cygwinPath = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<string>('cygwin_path');
+	devcloud.nodeDevice = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<string>('node_device');
 
 	// Updating parameters when they are changed in Setting.json
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
@@ -32,6 +33,9 @@ export function activate(context: vscode.ExtensionContext): void {
 		}
 		if (e.affectsConfiguration("intel-corporation.vscode-oneapi-devcloud-connector.cygwin_path")) {
 			devcloud.cygwinPath = vscode.workspace.getConfiguration().get<string>("intel-corporation.vscode-oneapi-devcloud-connector.cygwin_path");
+		}
+		if (e.affectsConfiguration("intel-corporation.vscode-oneapi-devcloud-connector.node_device")) {
+			devcloud.nodeDevice = vscode.workspace.getConfiguration().get<string>("intel-corporation.vscode-oneapi-devcloud-connector.node_device");
 		}
 	}));
 
