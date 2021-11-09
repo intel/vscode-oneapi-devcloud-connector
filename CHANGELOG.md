@@ -3,6 +3,7 @@
 ## 0.1.3
 
 - Added node device request in extension settings 
+- Added PBS job name "vscode"
 
 ## 0.1.2
 
