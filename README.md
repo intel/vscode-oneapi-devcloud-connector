@@ -133,6 +133,7 @@ command.
 ![image](media/use_the_ext1.png)
 
 * Set connection and Visual Studio Code session settings if needed.
+  You can request the node with specific device or another properties in "Node_device" section 
 
 ![image](media/use_the_ext2.png)
 
