@@ -3,5 +3,6 @@
     "capabilities.proxy.description": "If you are behind an SSH proxy, check the box\n",
     "capabilities.connection_timeout.description" : "SSH connection timeout in seconds\n",
     "capabilities.session_timeout.description" : "VSCode DevCloud session timeout\n Set the timeout in the following format: hh:mm:ss\n",
-    "capabilities.cygwin_path.description": "Path to Cygwin. For Windows host only. \n"
+    "capabilities.cygwin_path.description": "Path to Cygwin. For Windows host only. \n",
+    "capabilities.node_device.description": "Request specific device on compute node \n"
 }
