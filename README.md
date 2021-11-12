@@ -44,7 +44,7 @@ extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote
 * [Install
 Cygwin*](https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin)
 into the C:\cygwin64 folder. Automated installation is recommended. Make sure
-that ssh.exe and nc.exe are present in the /cygwin64/bin folder.
+that ssh.exe and nc.exe are present in the C:\cygwin64\bin folder.
 
 * Create a Intel® DevCloud account and setup your SSH config file and ssh.exe
 Cygwin client [for use with the VS Code Remote-SSH
@@ -200,6 +200,4 @@ This extension is released under the MIT License.
 
 *Other names and brands may be claimed as the property of others.
 
-
-## Known Issues
 
