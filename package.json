@@ -46,9 +46,10 @@
             "description": "%capabilities.node_device.description%",
             "default": "core",
             "enum": ["core","xeon","gen9","dual_gpu","quad_gpu","arria10","stratix10","fpga_compile","renderkit"],
-            "enumDescriptions": ["Intel Core processor","Intel Xeon processor","Intel Processor Graphics gen9",
-              "Dual Intel Iris Xe MAX Graphics", "Quad Intel Iris Xe MAX Graphics","Intel FPGA Arria10","Intel FPGA Stratix10",
-            "Intel Xeon system with 192 GB RAM for FPGA compile purpose","Intel Xeon system with 384 GB RAM for rendering purpose"]
+            "enumDescriptions": ["Intel® Core™ processor","Intel® Xeon® processor","Intel® Processor Graphics Gen9",
+              "Dual Intel® Iris® Xe MAX Graphics", "Quad Intel® Iris® Xe MAX Graphics","Intel® Arria® 10 FPGA","Intel® Stratix® 10 FPGA",
+            "Intel® Xeon® processor-based system with 192 GB RAM for FPGA compile purpose",
+            "Intel® Xeon® processor-based system with 384 GB RAM for rendering purpose"]
           }
         }
       }
