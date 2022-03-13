@@ -1,8 +1,9 @@
 {
-    
-    "capabilities.proxy.description": "If you are behind an SSH proxy, check the box\n",
+    "capabilities.proxy_server.description": "If you must route outgoing SSH connection via a corporate proxy, set PROXY_HOSTNAME:PORT below with the values provided by your network administrator and check the proxy box.\n",
+    "capabilities.proxy.description": "Select this checkbox if you are behind an SSH proxy.\n",
     "capabilities.connection_timeout.description" : "SSH connection timeout in seconds\n",
-    "capabilities.session_timeout.description" : "VSCode DevCloud session timeout\n Set the timeout in the following format: hh:mm:ss\n",
+    "capabilities.session_timeout.description" : "Visual Studio Code DevCloud session timeout\n Set the timeout in the following format: hh:mm:ss\n",
     "capabilities.cygwin_path.description": "Path to Cygwin. For Windows host only. \n",
-    "capabilities.node_device.description": "Request specific device on compute node \n"
+    "capabilities.node_device.description": "Request specific device on a compute node. \n"
 }
+
