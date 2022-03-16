@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.1.22
+
+- Automated Cygwin setup, ssh condig file setup, added autorun of Remote-SSH, updated readme. 
+
+- Added auto closing of VS Code session due to timeout, fixed several bugs, updated error handling
+
 ## 0.1.5
 
 - Updated readme
