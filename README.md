@@ -40,7 +40,7 @@ extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote
 
 * Create a Intel® [DevCloud account](https://devcloud.intel.com/oneapi/home/) and [download setup-devcloud-access-<user>.txt script](https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin/#configure-ssh-connection).
 
-* Cygwin* is requared for the Windows system. The extension will automatically install Cygwin during the first connection.
+* Cygwin* is required for the Windows system. The extension will automatically install Cygwin during the first connection.
 
 * Turn off your VPN (connecting via a VPN is not supported).
 
@@ -107,7 +107,7 @@ ready to disconnect from the DevCloud.
 
 
 * For access to DevCloud documentation, type `Ctrl+Shift+P` to open the
-  Command Palette, type **DevCloud** and select `Intel Devcloud: Get Help`.
+  Command Palette, type **DevCloud** and select `Intel DevCloud: Get Help`.
 
 
 ### End the Connection
