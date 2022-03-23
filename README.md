@@ -35,7 +35,7 @@ using the "DevCloud Terminal" feature in this extension.
 
 * Windows* 10 or Linux* Ubuntu* 18.04/20.04 (currently tested platforms).
 
-* Install [VS Code](https://code.visualstudio.com/download) 1.58.1 or later and install the [Remote-SSH
+* Install [VS Code](https://code.visualstudio.com/download) 1.64.0 or later and install the [Remote-SSH
 extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh).
 
 * Create a Intel® [DevCloud account](https://devcloud.intel.com/oneapi/home/) and [download setup-devcloud-access-<user>.txt script](https://devcloud.intel.com/oneapi/documentation/connect-with-ssh-windows-cygwin/#configure-ssh-connection).
