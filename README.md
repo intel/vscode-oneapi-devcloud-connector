@@ -64,30 +64,30 @@ extension.](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote
 1. Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
 2. Type **DevCloud** and select `Intel DevCloud: Setup connection`
 
-![image](media/use_the_ext3.png)
+   ![image](media/use_the_ext3.png)
 
 
-3.  If Cygwin is not present on the Windows system, the extension will prompt
+3. If Cygwin is not present on the Windows system, the extension will prompt
    you to automatically install it.
 
    After installing Cygwin, run the command `Intel DevCloud: Setup connection` again.
 
-4.  If an ssh config file is not present, the extension will prompt you to
+4. If an ssh config file is not present, the extension will prompt you to
    create it using the downloaded setup-devcloud-access-<user>.txt script.
 
-5.  During the first connection, the extension will ask to create an SSH
+5. During the first connection, the extension will ask to create an SSH
    fingerprint and open terminal. Type "yes" in the terminal to create the
    fingerprint.
    
-![image](media/use_the_ext4.png)
+   ![image](media/use_the_ext4.png)
 
 6. Wait for the connection process to finish.
 
-> NOTE: Two service terminals will be created with the names:
-`devcloudService1` and `devcloudService2`.
-These are terminals that are being used to facilitate your
-connection to the Intel® DevCloud. Do not close the terminals until you are
-ready to disconnect from the DevCloud.
+   > NOTE: Two service terminals will be created with the names:
+   `devcloudService1` and `devcloudService2`.
+   These are terminals that are being used to facilitate your
+   connection to the Intel® DevCloud. Do not close the terminals until you are
+   ready to disconnect from the DevCloud.
 
 
 7. If the connection setup is successful, Remote-SSH window will open and be
