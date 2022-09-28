@@ -42,7 +42,9 @@ export class SshConfigUtils {
     }
 
     public async createSshConfig(): Promise<boolean> {
-        await this.init();
+        if (!(await this.init())) {
+            return false;
+        }
         if (!this.sshExist() || !this.isSshConfigContentValid()) {
             const sshAccessScript = await this.getSshScript();
             if (!sshAccessScript) {
@@ -93,18 +95,14 @@ export class SshConfigUtils {
     private async setRemoteSshSettings(): Promise<void> {
         const settings = vscode.workspace.getConfiguration('remote');
         await settings.update('SSH.configFile', this._sshConfigPath, true);
+        await settings.update('SSH.path', join(this._cygwinFolderPath, 'bin', 'ssh.exe'), true);
 
-        if (existsSync(join(this._cygwinFolderPath, 'bin', 'ssh.exe'))) {
-            await settings.update('SSH.path', join(this._cygwinFolderPath, 'bin', 'ssh.exe'), true);
-        } else {
-            vscode.window.showErrorMessage("Cygwin does not contain the SSH executable.");
-        }
     }
 
     private async getSshScript(): Promise<string | undefined> {
         let sshAccessScript;
-        const selection = await vscode.window.showErrorMessage("SSH config file does not exist or doesn't contain DevCloud host.\n*To find path to setup-devcloud-access script, click 'Provide access script' button.\n*To get access to Devcloud and download the script, click Get access button.", { modal: true },
-            "Provide access script", "Get access to Devcloud");
+        const selection = await vscode.window.showErrorMessage("SSH config file does not exist or doesn't contain 'DevCloud' host.\n*To find path to setup-devcloud-access script, click 'Provide access script' button.\n*To get access to Intel Developer Cloud and download the script, click Get access button.", { modal: true },
+            "Provide access script", "Get access to Intel Developer Cloud");
         if (selection === "Provide access script") {
             const uri = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { 'setup-devcloud-access-': ['txt'] } });
             if (uri && uri[0]) {
@@ -112,7 +110,7 @@ export class SshConfigUtils {
             }
             this._firstConnection = true;
         }
-        if (selection === "Get access to Devcloud") {
+        if (selection === "Get access to Intel Developer Cloud") {
             vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/`));
         }
         return sshAccessScript;

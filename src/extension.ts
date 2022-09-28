@@ -10,9 +10,10 @@
 import * as vscode from 'vscode';
 import { unsetRemoteSshSettings } from './utils/ssh_config';
 import { DevConnect } from './devconnect';
-import { checkAndInstallExtension } from './utils/other';
+import { checkAndInstallExtension, removeDevCloudTerminalProfile } from './utils/other';
 
-export function activate(context: vscode.ExtensionContext): void {
+export async function activate(context: vscode.ExtensionContext): Promise<void> {
+	await removeDevCloudTerminalProfile();
 	for (const t of vscode.window.terminals) {
 		if ((t.name === 'devcloudService1 - do not close') || (t.name === 'devcloudService2 - do not close') ||
 			(t.name === 'HeadNode terminal') || (t.name === 'Install Cygwin') || (t.name.indexOf('DevCloudWork:') !== -1)) {
@@ -20,7 +21,6 @@ export function activate(context: vscode.ExtensionContext): void {
 		}
 	}
 	const devcloud = new DevConnect();
-	devcloud.isConnected = false;
 	devcloud.proxy = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<boolean>("proxy");
 	devcloud.proxyServer = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<string>("proxy_server");
 	devcloud.connectionTimeout = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<number>('connection_timeout');

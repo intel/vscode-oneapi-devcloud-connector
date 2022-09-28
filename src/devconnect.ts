@@ -7,12 +7,14 @@
 
 'use strict';
 
+
 import * as vscode from 'vscode';
 import { existsSync, readFileSync } from 'fs';
 import { execSync } from 'child_process';
 import { posix, join } from 'path';
 import { SshConfigUtils } from './utils/ssh_config';
 import { tmpdir } from 'os';
+import { addDevCloudTerminalProfile, removeDevCloudTerminalProfile } from './utils/other';
 
 export class DevConnect {
     private firstTerminal!: vscode.Terminal;
@@ -26,10 +28,11 @@ export class DevConnect {
     private userName!: string;
     private nodeName!: string;
     private jobID!: string;
+    private _statusBarItem: vscode.StatusBarItem;
 
     private _shellPath: string | undefined;
     private _sshConfigUtils!: SshConfigUtils;
-    private _isConnected!: boolean;
+    private _isConnected: boolean;
     private _proxy: boolean | undefined;
     private _proxyServer: string | undefined;
     private _connectionTimeout: number | undefined;
@@ -41,11 +44,14 @@ export class DevConnect {
     private _sessionTime: number | undefined;
     private _isCancelled: boolean | undefined;
 
+    constructor() {
 
-    public set isConnected(isConnected: boolean) {
-        this._isConnected = isConnected;
+        this._isConnected = false;
+        this._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
+        this._statusBarItem.text = 'Not connected to Intel Developer Cloud';
+        this._statusBarItem.tooltip = 'Intel Developer Cloud connection status';
+        this._statusBarItem.show();
     }
-
 
     public set proxy(proxy: boolean | undefined) {
         if (proxy === undefined) {
@@ -109,7 +115,7 @@ export class DevConnect {
 
         if (this._isConnected) {
 
-            vscode.window.showErrorMessage(`You have already connected to DevCloud.\nTo close current connection type Ctrl+Shift+P and choose "Intel DevCloud: Close connection"`, { modal: true });
+            vscode.window.showErrorMessage(`You have already connected to Intel Developer Cloud.\nTo close current connection type Ctrl+Shift+P and choose "Intel Developer Cloud: Close connection"`, { modal: true });
             return;
         }
 
@@ -124,6 +130,7 @@ export class DevConnect {
                 cancellable: true
             }, async (_progress, token) => {
                 token.onCancellationRequested(() => {
+                    this._isCancelled = true;
                     this.fingerprintTerminal?.dispose();
                     return false;
                 });
@@ -136,7 +143,7 @@ export class DevConnect {
                 this.fingerprintTerminal?.dispose();
                 return;
             }
-           
+
             execSync(`${this._shellPath} -i -l -c "rm ${this.fingerprintLog}"`);
             this.fingerprintTerminal?.dispose();
         }
@@ -147,6 +154,7 @@ export class DevConnect {
             cancellable: true
         }, async (_progress, token) => {
             token.onCancellationRequested(() => {
+                this._isCancelled = true;
                 this.firstTerminal?.dispose();
                 return false;
             });
@@ -185,11 +193,11 @@ export class DevConnect {
         this.removeTmpFiles();
 
         const initTime = new Date().getTime();
-        if(! await this.walltimeCheck(initTime)){
-            if(this._isConnected === false){
+        if (! await this.walltimeCheck(initTime)) {
+            if (this._isConnected === false) {
                 return;
             }
-            vscode.window.showInformationMessage('The session time out. Connection will be closed.',{modal:true});
+            vscode.window.showInformationMessage('The session time out. Connection will be closed.', { modal: true });
             this.closeConnection();
         }
 
@@ -198,10 +206,10 @@ export class DevConnect {
 
     public async closeConnection(): Promise<void> {
         if (!this._isConnected) {
-            vscode.window.showInformationMessage('There is no active connection to DevCloud');
+            vscode.window.showInformationMessage('There is no active connection to Intel Developer Cloud');
         }
         else {
-            vscode.window.showInformationMessage('Connection to DevCloud closed.');
+            vscode.window.showInformationMessage('Connection to Intel Developer Cloud closed.');
         }
         this.firstTerminal?.dispose();
         this.secondTerminal?.dispose();
@@ -210,6 +218,8 @@ export class DevConnect {
         this.qstatTerminal?.dispose();
 
         this._isConnected = false;
+        await removeDevCloudTerminalProfile();
+        this._statusBarItem.text = 'Not connected to Intel Developer Cloud';
         return;
     }
 
@@ -219,7 +229,7 @@ export class DevConnect {
     }
 
     public getHelp(): void {
-        const devCloudHelp = `DevCloud Help`;
+        const devCloudHelp = `Intel Developer Cloud Help`;
         vscode.window.showInformationMessage(`Click here for more information.`, devCloudHelp).then(selection => {
             if (selection) {
                 vscode.env.openExternal(vscode.Uri.parse(`https://devcloud.intel.com/oneapi/get_started/`));
@@ -231,7 +241,7 @@ export class DevConnect {
         if (!this.checkJobTimeoutFormat(this._jobTimeout)) {
             return false;
         }
-        if(!await this.installCygwin()){
+        if (!await this.installCygwin()) {
             return false;
         }
         if (!await (this.setShell())) {
@@ -274,6 +284,10 @@ export class DevConnect {
             this.fingerprintTerminal.sendText(`ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.fingerprintLog}`);
         }
         if (!await this.checkConnection(this.fingerprintLog, this.fingerprintTerminal)) {
+            if (this._isCancelled === true) {
+                this._isCancelled = false;
+                return false;
+            }
             const message = "Failed to create an ssh fingerprint. Possible fixes:\n\
     * Check your VPN status. Disconnect from any active VPN connections.\n\
     * Check your proxy in the extension settings.\n\
@@ -288,7 +302,7 @@ export class DevConnect {
 
     private async connectToHeadNode(): Promise<boolean> {
         const firsrtShellArgs = process.platform === 'win32' ? `-i -l -c "ssh devcloud${this._proxy === true ? ".proxy" : ""} > ${this.firstLog}"` : undefined;
-        const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal while working in the DevCloud. Do not type anything in this terminal.';
+        const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal while working in the Intel Developer Cloud. Do not type anything in this terminal.';
 
         this.firstTerminal = vscode.window.createTerminal({ name: `devcloudService1 - do not close`, shellPath: this._shellPath, shellArgs: firsrtShellArgs, message: message });
 
@@ -297,12 +311,16 @@ export class DevConnect {
         }
 
         if (!await this.checkConnection(this.firstLog, this.firstTerminal)) {
-               const message = "Failed to connect to head node. Possible fixes:\n\
+            if (this._isCancelled === true) {
+                this._isCancelled = false;
+                return false;
+            }
+            const message = "Failed to connect to head node. Possible fixes:\n\
     * Check your VPN status. Disconnect from any active VPN connections.\n\
     * Check your proxy in the extension settings.\n\
     * Check your Internet connection.\n\
     * Try to increase connection timeout in the extension settings.";
-            
+
             vscode.window.showErrorMessage(message, { modal: true });
             this._terminalExitStatus = 0;
 
@@ -316,7 +334,7 @@ export class DevConnect {
             return false;
         }
 
-        const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal while working in the DevCloud. Do not type anything in this terminal';
+        const message = 'DEVCLOUD SERVICE TERMINAL. Do not close this terminal while working in the Intel Developer Cloud. Do not type anything in this terminal';
         const secondShellArgs = process.platform === 'win32' ? `-i -l -c "ssh -o StrictHostKeyChecking=no ${this.nodeName?.concat(`.aidevcloud`)} > ${this.secondLog}"` : undefined;
         this.secondTerminal = vscode.window.createTerminal({ name: `devcloudService2 - do not close`, shellPath: this._shellPath, shellArgs: secondShellArgs, message: message });
 
@@ -326,7 +344,7 @@ export class DevConnect {
         }
 
         if (!await this.checkConnection(this.secondLog, this.secondTerminal)) {
-            if(this._isCancelled === true){
+            if (this._isCancelled === true) {
                 this._isCancelled = false;
                 return false;
             }
@@ -336,6 +354,8 @@ export class DevConnect {
             return false;
         }
         this._isConnected = true;
+        await addDevCloudTerminalProfile(this.nodeName, this._shellPath);
+        this._statusBarItem.text = 'Connected to Intel Developer Cloud';
         return true;
     }
 
@@ -350,7 +370,8 @@ export class DevConnect {
             }
         }
         else {
-            vscode.window.showErrorMessage('There is no active connection to DevCloud');
+            vscode.window.showErrorMessage('There is no active connection to Intel Developer Cloud');
+            return false;
         }
         this.devCloudTerminal.show();
 
@@ -359,10 +380,10 @@ export class DevConnect {
 
     private async createInteractiveJob(): Promise<boolean> {
         const qsubOptions = `qsub -I -l nodes=1:${this._nodeDevice}:ppn=2 ${this._jobTimeout !== undefined ? `-l walltime=${this._jobTimeout}` : ``} -N vscode`;
-       this.firstTerminal.sendText(`\n`);  //Do not remove, this is bug fix
+        this.firstTerminal.sendText(`\n`);  //Do not remove, this is bug fix
         this.firstTerminal.sendText(qsubOptions);
         this.firstTerminal.sendText(`\n`); //Do not remove, this is bug fix
-        this.firstTerminal.sendText(`qstat -f`); 
+        this.firstTerminal.sendText(`qstat -f`);
 
         if (!await this.getJobID(this.firstLog)) {
             vscode.window.showErrorMessage("Failed to create interactive job. Possible reasons:\n\n\
@@ -413,13 +434,13 @@ To install Cygwin?";
                 execSync(`powershell -Command "[System.Net.ServicePointManager]::SecurityProtocol ='Tls12';Invoke-WebRequest https://devcloud.intel.com/oneapi/static/assets/install_cygwin.bat -OutFile ${path}"`);
                 const installTerminal = vscode.window.createTerminal({ name: `Install Cygwin` });
                 installTerminal.show();
-                installTerminal.sendText(path);                
+                installTerminal.sendText(path);
             }
-            if (selection === 'No'){
+            if (selection === 'No') {
                 return false;
             }
         }
-            return true;
+        return true;
     }
 
     private async getNodeName(): Promise<boolean> {
@@ -534,9 +555,9 @@ To install Cygwin?";
                 if (terminal === this.fingerprintTerminal) {
                     if (this._fterminalExitStatus === 255) {
                         resolve(false);
-                    }                        
+                    }
                 }
-                if(this._isCancelled === true){
+                if (this._isCancelled === true) {
                     this.secondTerminal?.dispose();
                     resolve(false);
                 }
@@ -574,19 +595,19 @@ To install Cygwin?";
     private async walltimeCheck(initTime: number): Promise<boolean> {
         return new Promise(resolve => {
             const timerId = setInterval(async () => {
-            const currentTime = new Date().getTime();
-            const currentSessionTime = (currentTime - initTime);
-            const st1 = (Number(this._sessionTime) - 2*Number(this._connectionTimeout));
-            if(this._isConnected === false){
-                clearInterval(timerId);
-                resolve(false);
-            }
-            if(currentSessionTime > st1){
-                clearInterval(timerId);
-                resolve(false);
-            }
+                const currentTime = new Date().getTime();
+                const currentSessionTime = (currentTime - initTime);
+                const st1 = (Number(this._sessionTime) - 2 * Number(this._connectionTimeout));
+                if (this._isConnected === false) {
+                    clearInterval(timerId);
+                    resolve(false);
+                }
+                if (currentSessionTime > st1) {
+                    clearInterval(timerId);
+                    resolve(false);
+                }
             }, 1000);
-            
+
             setTimeout(() => {
                 clearInterval(timerId);
                 resolve(false);
@@ -596,7 +617,7 @@ To install Cygwin?";
     private async getUserNameFromConfig(config: string): Promise<boolean> {
         const idx1 = config.indexOf(`Host devcloud`);
         if (idx1 < 0) {
-            vscode.window.showErrorMessage(`Your SSH config file does not contain a "devcloud" host alias. Confirm that you have downloaded and configured your SSH config file for use with the Intel oneAPI DevCloud. For detailed instructions, see: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/ `, { modal: true });
+            vscode.window.showErrorMessage(`Your SSH config file does not contain a "devcloud" host alias. Confirm that you have downloaded and configured your SSH config file for use with the Intel Developer Cloud. For detailed instructions, see: https://devcloud.intel.com/oneapi/documentation/connect-with-vscode/ `, { modal: true });
             return false;
         }
         const idx2 = config.indexOf(`User`, idx1);
@@ -627,14 +648,15 @@ To install Cygwin?";
             ss and mm take values from 0 to 59, and hh from 0 to 24");
             return false;
         }
-        if (hh === 24 && mm !== 0 && ss !== 0) {
+        if (hh === 24 && (mm !== 0 || ss !== 0)) {
             vscode.window.showErrorMessage("Invalid session timeout value. Max time is 24h, so the only valid entry for\
-             hh = 24 is 24:00:00");
+            hh = 24 is 24:00:00");
             return false;
         }
-        this._sessionTime = (hh*3600 + mm*60 + ss)*1000;
-        if(this._sessionTime < (3*Number(this._connectionTimeout))){
-            vscode.window.showErrorMessage(`Session timeout must be more than ${3*Number(this._connectionTimeout)/1000} sec`);
+        this._jobTimeout = `${hh}:${mm}:${ss}`;
+        this._sessionTime = (hh * 3600 + mm * 60 + ss) * 1000;
+        if (this._sessionTime < (3 * Number(this._connectionTimeout))) {
+            vscode.window.showErrorMessage(`Session timeout must be more than ${3 * Number(this._connectionTimeout) / 1000} sec`);
             return false;
         }
         return true;

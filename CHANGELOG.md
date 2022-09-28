@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.1.23
+
+- Updated extension name
+
+- Added the ability to create an Intel Developer Cloud terminal using the create terminal button when connected to the Intel Developer Cloud
+
+- Added status bar showing connection status to Intel Developer Cloud
+
 ## 0.1.22
 
 - Automated Cygwin setup, ssh config file setup, added autorun of Remote-SSH, updated readme. 
