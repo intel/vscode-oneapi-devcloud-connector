@@ -18,17 +18,19 @@
 			"preLaunchTask": "${defaultBuildTask}"
 		},
 		{
-			"name": "Extension Tests",
-			"type": "extensionHost",
+			"name": "Debug UI Tests",
+			"type": "node",
 			"request": "launch",
+			"program": "${workspaceFolder}/node_modules/vscode-extension-tester/out/cli.js",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}",
-				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+				"setup-and-run",
+				"${workspaceFolder}/out/test/ui/*.js",
+				"--mocha_config",
+				"${workspaceFolder}/src/test/ui/configs/.mocharc-debug.js",
+				"-o",
+				"${workspaceFolder}/src/test/ui/configs/settings.json"
 			],
-			"outFiles": [
-				"${workspaceFolder}/out/test/**/*.js"
-			],
-			"preLaunchTask": "${defaultBuildTask}"
+			"console": "integratedTerminal",
 		}
 	]
 }
