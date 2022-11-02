@@ -119,7 +119,7 @@ export class SshConfigUtils {
     private configureProxySettings(): boolean {
         const config = readFileSync(this._sshConfigPath).toString();
         if (config) {
-            const firstRegEx = /Host devcloud-via-proxy\nUser guest\nHostname ssh\.devcloud\.intel\.com\nIdentityFile ~\/\.ssh\/devcloud-access-key-[1-9]*\.txt\nLocalForward 4022 c009:22\nProxyCommand nc -x .*:.* %h %p/gmi;
+            const firstRegEx = /Host devcloud-via-proxy\nUser guest\nHostname ssh\.devcloud\.intel\.com\nIdentityFile ~\/\.ssh\/devcloud-access-key-[0-9]*\.txt\nLocalForward 4022 c009:22\nProxyCommand nc -x .*:.* %h %p/gmi;
             const secondRegEx = /Host \*\.aidevcloud\nUser .*\nIdentityFile .*\nProxyCommand ssh -T (devcloud\.proxy|devcloud) nc %h %p/gmi;
             const firstReplace = config.match(firstRegEx);
             const secondReplace = config.match(secondRegEx);

@@ -1,4 +1,7 @@
 # Change Log
+## 0.1.24
+
+- Bug fixing
 
 ## 0.1.23
 
