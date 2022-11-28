@@ -7,7 +7,7 @@ import { join } from 'path/win32';
 
 const cygwinDefaultPath = join('C:', 'cygwin64');
 const sshConfigDefaultPath = join(cygwinDefaultPath, `home`, `${process.env.USERNAME}`, `.ssh`, `config`);
-describe('Intel Developer Cloud connector basic tests', () => {
+describe('Intel DevCloud connector basic tests', () => {
   let browser: VSBrowser;
   let driver: WebDriver;
   let workbench: Workbench;
@@ -52,7 +52,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Dialog box pops up if Cygwin_path is invalid", async function () {
         await setting.setValue('invalid string');
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         await driver.sleep(1000);
         const message = await driver.wait(async () => {
           const dialog = new ModalDialog();
@@ -89,7 +89,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       });
       it("Error message if proxy enabled but the Proxy_server is not specified", async function () {
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('You have the Proxy option enabled');
         }, 10000) as Notification;
@@ -99,7 +99,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
         const proxyServerTestValue = 'test_proxy_server_string';
         await proxyServer.setValue(proxyServerTestValue);
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('Connecting to head node...');
         }, 10000) as Notification;
@@ -124,7 +124,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if invalid session timeout format", async function () {
         await setting.setValue('invalid string');
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('Use the following format: hh:mm:ss');
         }, 10000) as Notification;
@@ -133,7 +133,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'hh' is not a number", async function () {
         await setting.setValue("aa:00:00");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('hh,mm,ss must be positive integers');
         }, 10000) as Notification;
@@ -142,7 +142,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'hh' is negative number", async function () {
         await setting.setValue("-10:00:00");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('hh,mm,ss must be positive integers');
         }, 10000) as Notification;
@@ -151,7 +151,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'hh' is greater than 24", async function () {
         await setting.setValue("25:00:00");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('ss and mm take values from 0 to 59, and hh from 0 to 24');
         }, 10000) as Notification;
@@ -161,7 +161,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'mm' is not a number", async function () {
         await setting.setValue("00:aa:00");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('hh,mm,ss must be positive integers');
         }, 10000) as Notification;
@@ -170,7 +170,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'mm' is negative number", async function () {
         await setting.setValue("00:-10:00");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('hh,mm,ss must be positive integers');
         }, 10000) as Notification;
@@ -179,7 +179,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'mm' is greater than 59", async function () {
         await setting.setValue("00:65:00");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('ss and mm take values from 0 to 59, and hh from 0 to 24');
         }, 10000) as Notification;
@@ -189,7 +189,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'ss' is not a number", async function () {
         await setting.setValue("00:00:aa");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('hh,mm,ss must be positive integers');
         }, 10000) as Notification;
@@ -198,7 +198,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'ss' is negative number", async function () {
         await setting.setValue("00:00:-10");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('hh,mm,ss must be positive integers');
         }, 10000) as Notification;
@@ -207,7 +207,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if 'ss' is greater than 59", async function () {
         await setting.setValue("00:00:65");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications('ss and mm take values from 0 to 59, and hh from 0 to 24');
         }, 10000) as Notification;
@@ -217,7 +217,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       it("Error message if time out value is greater than 24h", async function () {
         await setting.setValue("24:00:1");
         await driver.sleep(1000);
-        await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+        await workbench.executeCommand('Intel DevCloud: Setup connection');
         const notification = await driver.wait(async () => {
           return await getNotifications("Max time is 24h, so the only valid entry");
         }, 10000) as Notification;
@@ -239,60 +239,60 @@ describe('Intel Developer Cloud connector basic tests', () => {
   describe('Commands are available', () => {
     it('Contain "Close connection" command', async function () {
       const input = await workbench.openCommandPrompt() as InputBox;
-      await input.setText('>Intel Developer Cloud');
+      await input.setText('>Intel DevCloud');
       await driver.sleep(500);
-      const picks = await input.findQuickPick("Intel Developer Cloud: Close connection");
+      const picks = await input.findQuickPick("Intel DevCloud: Close connection");
       expect(picks).not.undefined;
     });
 
     it('Contain "Setup connection" command', async function () {
       const input = await workbench.openCommandPrompt() as InputBox;
-      await input.setText('>Intel Developer Cloud');
+      await input.setText('>Intel DevCloud');
       await driver.sleep(500);
-      const picks = await input.findQuickPick("Intel Developer Cloud: Setup connection");
+      const picks = await input.findQuickPick("Intel DevCloud: Setup connection");
       expect(picks).not.undefined;
     });
 
     it('Contain "Get help" command', async function () {
       const input = await workbench.openCommandPrompt() as InputBox;
-      await input.setText('>Intel Developer Cloud');
+      await input.setText('>Intel DevCloud');
       await driver.sleep(500);
-      const picks = await input.findQuickPick("Intel Developer Cloud: Get help");
+      const picks = await input.findQuickPick("Intel DevCloud: Get help");
       expect(picks).not.undefined;
     });
 
     it('Contain "New DevCloud terminal" command', async function () {
       const input = await workbench.openCommandPrompt() as InputBox;
-      await input.setText('>Intel Developer Cloud');
+      await input.setText('>Intel DevCloud');
       await driver.sleep(500);
-      const picks = await input.findQuickPick("Intel Developer Cloud: New Intel Developer Cloud terminal");
+      const picks = await input.findQuickPick("Intel DevCloud: New Intel DevCloud terminal");
       expect(picks).not.undefined;
     });
   });
 
   it('"Close connection" shows message about no connection', async function () {
-    await workbench.executeCommand('Intel Developer Cloud: Close connection');
+    await workbench.executeCommand('Intel DevCloud: Close connection');
     const notification = await driver.wait(async () => {
-      return await getNotifications('There is no active connection to Intel Developer Cloud');
+      return await getNotifications('There is no active connection to Intel DevCloud');
     }, 10000) as Notification;
     expect(await notification.getType()).equals(NotificationType.Info);
   });
 
   it('"Create terminal" shows message about no connection', async function () {
-    await workbench.executeCommand('Intel Developer Cloud: New Intel Developer Cloud terminal');
+    await workbench.executeCommand('Intel DevCloud: New Intel DevCloud terminal');
     const notification = await driver.wait(async () => {
-      return await getNotifications('There is no active connection to Intel Developer Cloud');
+      return await getNotifications('There is no active connection to Intel DevCloud');
     }, 10000) as Notification;
     expect(await notification.getType()).equals(NotificationType.Error);
   });
 
-  it('There is a status bar with "Not connected to Intel Developer Cloud" text', async function () {
+  it('There is a status bar with "Not connected to Intel DevCloud" text', async function () {
     const statusbar = new StatusBar();
 
     //StatusBar.getItem() find status bar item by title
     //The title attribute represents the text + the tooltip of the status bar element
     //This may be changed in the future
-    const devcloudStatusBar = await statusbar.getItem('Not connected to Intel Developer Cloud, Intel Developer Cloud connection status');
+    const devcloudStatusBar = await statusbar.getItem('Not connected to Intel DevCloud, Intel DevCloud connection status');
     expect(devcloudStatusBar).not.undefined;
   });
 
@@ -305,7 +305,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
     });
 
     it('Prompt to provide access script', async function () {
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       await driver.sleep(1000);
       const message = await driver.wait(async () => {
         const dialog = new ModalDialog();
@@ -318,7 +318,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
     });
 
     it('SSH config contain "Host DevCloud" after providing access', async function () {
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       await driver.sleep(1000);
       const dialog = new ModalDialog();
       await dialog.pushButton('Provide access script');
@@ -343,7 +343,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       const oldName = join(cygwinDefaultPath, 'bin', 'ssh.exe');
       const newName = join(cygwinDefaultPath, 'bin', 'ssh1.exe');
       renameSync(oldName, newName);
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       const notification = await driver.wait(async () => {
         return await getNotifications('Cygwin does not contain the SSH executable.');
       }, 10000) as Notification;
@@ -357,7 +357,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       await setting.setValue('');
       await settings.findSetting('Config File', 'Remote.SSH');
       await driver.sleep(1000);
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       const notification = await driver.wait(async () => {
         return await getNotifications('Connecting to head node...');
       }, 10000) as Notification;
@@ -374,7 +374,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
       await setting.setValue('');
       await settings.findSetting('Path', 'Remote.SSH');
       await driver.sleep(1000);
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       const notification = await driver.wait(async () => {
         return await getNotifications('Connecting to head node...');
       }, 10000) as Notification;
@@ -401,7 +401,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
     });
 
     it('Progress bar appeared', async function () {
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       await driver.sleep(2500);
       const dialog = new ModalDialog();
       await dialog.pushButton("OK");
@@ -420,7 +420,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
 
     // it('Known_host created', async function () {
     //   const terminalView = await new BottomBarPanel().openTerminalView();
-    //   await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+    //   await workbench.executeCommand('Intel DevCloud: Setup connection');
     //   await terminalView.newTerminal();
 
     //   await driver.sleep(2500);
@@ -443,7 +443,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
 
   describe('Connect to head node', () => {
     it('Progress bar appeared', async function () {
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       const notification = await driver.wait(async () => {
         return await getNotifications('Connecting to head node...');
       }, 10000) as Notification;
@@ -457,7 +457,7 @@ describe('Intel Developer Cloud connector basic tests', () => {
 
   describe('Connect to compute node', () => {
     it('Progress bar appeared', async function () {
-      await workbench.executeCommand('Intel Developer Cloud: Setup connection');
+      await workbench.executeCommand('Intel DevCloud: Setup connection');
       await driver.sleep(15000);
       const notification = await driver.wait(async () => {
         return await getNotifications('Connecting to compute node...');

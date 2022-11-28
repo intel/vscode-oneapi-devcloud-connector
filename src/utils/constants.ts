@@ -1,3 +1,13 @@
+/**
+ * Copyright (c) Intel Corporation
+ * Licensed under the MIT License. See the project root LICENSE
+ * 
+ * SPDX-License-Identifier: MIT
+ */
+
+export const devcloudName = "Intel DevCloud";
+
+//ssh fingerprints for devcloud
 export const SSH_DEVCLOUD_INTEL_COM = [
     'AAAAC3NzaC1lZDI1NTE5AAAAIDIGwSUzJCMFNSftDKLn/EPXIJP6MKAH8TkfxgoN3tvB',
     'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPhRp937We7Ki2wXpQLV9WshuwxmaCKChl5bDihaN9OO0nxg5ZttUmuW+iT+ncv8hNVpESZS4HTOiOjt/V5M6Tk='

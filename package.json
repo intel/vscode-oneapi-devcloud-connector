@@ -1,8 +1,8 @@
 {
   "name": "vscode-oneapi-devcloud-connector",
-  "displayName": "Intel® Developer Cloud Connector for Intel® oneAPI Toolkits",
-  "description": "Simplifies connecting to Intel® Developer Cloud",
-  "version": "0.1.23",
+  "displayName": "Intel® DevCloud Connector for Intel® oneAPI Toolkits",
+  "description": "Simplifies connecting to Intel® DevCloud",
+  "version": "0.1.25",
   "license": "MIT",
   "icon": "media/oneapi-logo.png",
   "publisher": "intel-corporation",
@@ -19,7 +19,7 @@
   "contributes": {
     "configuration": [
       {
-        "title": "Intel® Developer Cloud Connector for Intel® oneAPI Toolkits",
+        "title": "Intel® DevCloud Connector for Intel® oneAPI Toolkits",
         "properties": {
           "intel-corporation.vscode-oneapi-devcloud-connector.proxy": {
             "type": "boolean",
@@ -47,39 +47,13 @@
           "intel-corporation.vscode-oneapi-devcloud-connector.choose_cluster": {
             "type": "string",
             "description": "%capabilities.choose_cluster.description%",
-            "default": "Public Intel Developer Cloud",
+            "default": "Public Intel DevCloud",
             "enum": [
-              "Public Intel Developer Cloud",
-              "Intel Developer Cloud NDA"
+              "Public Intel DevCloud",
+              "NDA Intel DevCloud",
+              "FPGA Intel DevCloud"
             ],
             "enumDescriptions": []
-          },
-          "intel-corporation.vscode-oneapi-devcloud-connector.node_device": {
-            "type": "string",
-            "description": "%capabilities.node_device.description%",
-            "default": "xeon",
-            "enum": [
-              "core",
-              "xeon",
-              "gen9",
-              "dual_gpu",
-              "quad_gpu",
-              "arria10",
-              "stratix10",
-              "fpga_compile",
-              "renderkit"
-            ],
-            "enumDescriptions": [
-              "Intel® Core™ processor",
-              "Intel® Xeon® processor",
-              "Intel® Processor Graphics Gen9",
-              "Dual Intel® Iris® Xe MAX Graphics",
-              "Quad Intel® Iris® Xe MAX Graphics",
-              "Intel® Arria® 10 FPGA",
-              "Intel® Stratix® 10 FPGA",
-              "Intel® Xeon® processor-based system with 192 GB RAM for FPGA placing and routing. These nodes do not contain an FPGA card.",
-              "Intel® Xeon® processor-based system with 384 GB RAM configured for the Rendering Toolkit"
-            ]
           }
         }
       }
@@ -87,19 +61,19 @@
     "commands": [
       {
         "command": "intel-corporation.vscode-oneapi-devcloud-connector.setupConnection",
-        "title": "Intel Developer Cloud: Setup connection"
+        "title": "Intel DevCloud: Setup connection"
       },
       {
         "command": "intel-corporation.vscode-oneapi-devcloud-connector.closeConnection",
-        "title": "Intel Developer Cloud: Close connection"
+        "title": "Intel DevCloud: Close connection"
       },
       {
         "command": "intel-corporation.vscode-oneapi-devcloud-connector.help",
-        "title": "Intel Developer Cloud: Get help"
+        "title": "Intel DevCloud: Get help"
       },
       {
         "command": "intel-corporation.vscode-oneapi-devcloud-connector.devcloudTerminal",
-        "title": "Intel Developer Cloud: New Intel Developer Cloud terminal"
+        "title": "Intel DevCloud: New Intel DevCloud terminal"
       }
     ]
   },
@@ -126,7 +100,7 @@
     "mocha": "^9.2.1",
     "typescript": "^4.5.5",
     "vsce": "^2.6.7",
-    "vscode-extension-tester": "^4.2.4",
+    "vscode-extension-tester": "^5.1.0",
     "vscode-test": "^1.6.1"
   },
   "repository": {

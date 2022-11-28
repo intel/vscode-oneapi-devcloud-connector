@@ -1,10 +1,8 @@
 {
     "capabilities.proxy_server.description": "If you must route outgoing SSH connection via a corporate proxy, set PROXY_HOSTNAME:PORT below with the values provided by your network administrator and check the proxy box.\n",
     "capabilities.proxy.description": "Select this checkbox if you are behind an SSH proxy.\n",
-    "capabilities.connection_timeout.description" : "SSH connection timeout in seconds\n",
-    "capabilities.session_timeout.description" : "Visual Studio Code Intel Developer Cloud session timeout\n Set the timeout in the following format: hh:mm:ss\n",
+    "capabilities.connection_timeout.description": "SSH connection timeout in seconds\n",
+    "capabilities.session_timeout.description": "Visual Studio Code Intel DevCloud session timeout\n Set the timeout in the following format: hh:mm:ss\n",
     "capabilities.cygwin_path.description": "Path to Cygwin. For Windows host only. \n",
-    "capabilities.choose_cluster.description": "Choose public Intel Developer Cloud or Intel Developer Cloud NDA. \n",
-    "capabilities.node_device.description": "Request specific device on a compute node. \n"
+    "capabilities.choose_cluster.description": "Choose Public,FPGA or NDA Intel DevCloud. Make sure you have access to the NDA Intel DevCloud\n"
 }
-

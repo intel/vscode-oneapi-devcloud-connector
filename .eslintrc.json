@@ -25,6 +25,8 @@
         "out",
         "dist",
         "**/*.d.ts",
-        "test-resources/**"
+        "test-resources/**",
+        "vscode*",
+        "node_modules"
     ]
 }

@@ -1,12 +1,16 @@
 # Change Log
 
+## 0.2.0
+
+- Added the ability to connect to FPGA and NDA clusters
+
+- Compute node selection now occurs during the connection process, instead of selection in the extension settings
+
 ## 0.1.23
 
-- Updated extension name
+- Added the ability to create an Intel DevCloud terminal using the create terminal button when connected to the Intel DevCloud
 
-- Added the ability to create an Intel Developer Cloud terminal using the create terminal button when connected to the Intel Developer Cloud
-
-- Added status bar showing connection status to Intel Developer Cloud
+- Added status bar showing connection status to Intel DevCloud
 
 ## 0.1.22
 
