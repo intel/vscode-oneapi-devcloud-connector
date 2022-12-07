@@ -96,22 +96,22 @@ export class ComputeNodeSelector {
     }
 
     private static async selectComputeNodeFromDeviceClass(): Promise<boolean> {
-        const allNodesFromDeviceClass: string[] = [];
+        const allNodesFromDeviceClass: Set<string> = new Set<string>;
         for (const node of ComputeNodeSelector.nodes) {
             if (node.properties.indexOf(ComputeNodeSelector.selectedDeviceClass) >= 0) {
-                allNodesFromDeviceClass.push(`${node.name} ${node.properties} `);
+                allNodesFromDeviceClass.add(`${node.properties}`);
             }
         }
-        if (allNodesFromDeviceClass.length === 0) {
+        if (allNodesFromDeviceClass.size === 0) {
         }
         let selectedNode = undefined;
         while (!selectedNode) {
-            selectedNode = await vscode.window.showQuickPick(allNodesFromDeviceClass, { matchOnDescription: true, placeHolder: "Select the compute node you want to use", title: "Available compute nodes" });
+            selectedNode = await vscode.window.showQuickPick(Array.from(allNodesFromDeviceClass), { matchOnDescription: true, placeHolder: "Select the compute node you want to use", title: "Available compute nodes" });
         }
         if (!selectedNode) {
             return false;
         }
-        this.selectedNode = selectedNode.split(' ')[0];
+        this.selectedNode = selectedNode;
         return true;
     }
 

@@ -56,7 +56,9 @@ export class DevConnect {
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
         this.statusBarItem.text = `Not connected to ${devcloudName}`;
         this.statusBarItem.tooltip = `${devcloudName} connection status`;
-        this.statusBarItem.show();
+        if ((process.platform === 'win32') || (process.platform === 'linux')) {
+            this.statusBarItem.show();
+        }
     }
 
     public set terminalExitStatus(terminalExitStatus: number | undefined) {
@@ -64,6 +66,9 @@ export class DevConnect {
     }
 
     public async setupConnection(): Promise<void> {
+        if (!this.checkPlatform()) {
+            return;
+        }
         AbortControllerWrap.refresh();
         if (this.isConnected) {
             vscode.window.showErrorMessage(`You have already connected to ${devcloudName}.\nTo close current connection type Ctrl+Shift+P and choose "${devcloudName}: Close connection"`, { modal: true });
@@ -170,6 +175,9 @@ export class DevConnect {
     }
 
     public async closeConnection(): Promise<void> {
+        if (!this.checkPlatform()) {
+            return;
+        }
         if (!this.isConnected) {
             vscode.window.showInformationMessage(`There is no active connection to ${devcloudName}`);
             return;
@@ -190,6 +198,9 @@ export class DevConnect {
     }
 
     public async createDevCloudTerminal(): Promise<void> {
+        if (!this.checkPlatform()) {
+            return;
+        }
         this.createNodeTerminal();
         return;
     }
@@ -305,7 +316,7 @@ export class DevConnect {
         try {
             const computeNodeProperties = await ComputeNodeSelector.selectComputeNode();
             return await new Promise((resolve, _reject) => {
-                exec(`${Shell.shellPath} -l -c "ssh devcloud${ExtensionSettings._proxy === true ? ".proxy" : ""} 'echo \\#\\!/bin/bash > ~/tmp/vscodeTunnelJob.sh && echo sleep 99999 >> ~/tmp/vscodeTunnelJob.sh && qsub -q batch@${ExtensionSettings._cluster} -l nodes=${computeNodeProperties}:ppn=2 ${ExtensionSettings._jobTimeout !== undefined ? ` -l walltime=${ExtensionSettings._jobTimeout}` : ``} -N vscodeTunnelJob -d . ~/tmp/vscodeTunnelJob.sh' "`,
+                exec(`${Shell.shellPath} -l -c "ssh devcloud${ExtensionSettings._proxy === true ? ".proxy" : ""} 'echo \\#\\!/bin/bash > ~/tmp/vscodeTunnelJob.sh && echo sleep 99999 >> ~/tmp/vscodeTunnelJob.sh && qsub -q batch@${ExtensionSettings._cluster} -l nodes=1:${computeNodeProperties}:ppn=2 ${ExtensionSettings._jobTimeout !== undefined ? ` -l walltime=${ExtensionSettings._jobTimeout}` : ``} -N vscodeTunnelJob -d . ~/tmp/vscodeTunnelJob.sh' "`,
                     { signal: AbortControllerWrap.signal() },
                     (_error, stdout, _stderr) => {
                         const matchJobID = stdout.match(/(\d*).v-qsvr-(1|nda|fpga).aidevcloud/i);
@@ -504,4 +515,11 @@ export class DevConnect {
         return;
     }
 
+    private checkPlatform(): boolean {
+        if ((process.platform !== 'win32') && (process.platform !== 'linux')) {
+            vscode.window.showErrorMessage(`Failed to activate the '${devcloudName} Connector for Intel oneAPI Toolkits' extension. The extension is only supported on Linux and Windows.`, { modal: true });
+            return false;
+        }
+        return true;
+    }
 }

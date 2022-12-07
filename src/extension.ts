@@ -9,6 +9,7 @@ import * as vscode from 'vscode';
 import { DevConnect } from './devconnect';
 import { checkAndInstallExtension, removeDevCloudTerminalProfile } from './utils/other';
 import { ExtensionSettings } from './utils/extension_settings';
+import { unsetRemoteSshSettings } from './utils/ssh_config';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
 	await removeDevCloudTerminalProfile();
@@ -47,5 +48,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 export async function deactivate(): Promise<void> {
 	const devcloud = DevConnect.getInstance();
 	devcloud.closeConnection();
+	await unsetRemoteSshSettings();
 	return;
 }

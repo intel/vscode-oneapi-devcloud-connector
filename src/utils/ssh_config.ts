@@ -7,7 +7,7 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, linkSync, mkdirSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, posix, sep } from 'path';
 import * as vscode from 'vscode';
 import { DEVCLOUD, SSH_DEVCLOUD_INTEL_COM, devcloudName } from './constants';
@@ -16,13 +16,11 @@ import { Shell } from './shell';
 
 export class SshConfigUtils {
     private _sshConfigPath: string;
-    private _setupAccessScriptPath: string | undefined;
     public _firstConnection: boolean;
 
     constructor() {
-        this._setupAccessScriptPath = undefined;
         this._firstConnection = false;
-        this._sshConfigPath = (process.platform !== 'win32' && process.env.HOME) ? join(process.env.HOME, ".ssh", "config") :
+        this._sshConfigPath = (process.platform !== 'win32') ? join(`${process.env.HOME}`, ".ssh", "config") :
             join(ExtensionSettings._cygwinPath!, `home`, `${process.env.USERNAME}`, `.ssh`, `config`);
     }
 
@@ -40,90 +38,42 @@ export class SshConfigUtils {
     }
 
     public async createSshConfig(): Promise<boolean> {
-        const settings = vscode.workspace.getConfiguration('remote');
-        await settings.update('SSH.configFile', undefined, true);
-        await settings.update('SSH.path', undefined, true);
-        if (!this.isSshConfigExist() || !this.isSshConfigContentValid()) {
-            if (process.platform === 'win32') {
-                this.rewriteConfigFile();
+        try {
+            if (!this.isSshConfigExist() || !this.isSshConfigContentValid()) {
+                await this.runSetupAccessScript();
             }
-            if (!await this.runSetupAccessScript(true)) {
+            if (process.platform === "win32") {
+                await this.setRemoteSshSettings();
+                if (!this.isCygwSshExecutableExist()) {
+                    return false;
+                }
+            }
+            if (!this.configureProxySettings()) {
+                vscode.window.showErrorMessage("Failed to automatically configure ssh config proxy settings.");
                 return false;
             }
+            return true;
         }
-        if (process.platform === "win32") {
-            if (!this.isCygwSshExecutableExist()) {
-                return false;
-            }
-            try {
-                this.createSshLinks();
-            }
-            catch (e) {
-                vscode.window.showWarningMessage(`Failed to use existing ssh config file. Created a new one in ${this._sshConfigPath}`);
-                rmSync(join(ExtensionSettings._cygwinPath!, `home`, `${process.env.USERNAME}`, `.ssh`), { recursive: true, force: true });
-                await this.runSetupAccessScript(false);
-
-                await settings.update('SSH.configFile', this._sshConfigPath, true);
-                await settings.update('SSH.path', join(ExtensionSettings._cygwinPath!, 'bin', 'ssh.exe'), true);
-            }
-        }
-        if (!this.configureProxySettings()) {
-            vscode.window.showErrorMessage("Failed to automatically configure ssh config proxy settings.");
+        catch (e) {
+            vscode.window.showErrorMessage(`Failed to create SSH config file:\n${(e as Error).message}`);
             return false;
         }
-        return true;
     }
 
-    //fixing file owner and permissions
-    private rewriteConfigFile() {
-        const configPath = join(`${process.env.USERPROFILE}`, `.ssh`, `config`);
-        if (!existsSync(configPath)) {
-            return;
-        }
-        const configContent = readFileSync(configPath).toString();
-        unlinkSync(configPath);
-        execSync(`> /cygdrive/c/Users/${process.env.USERNAME}/.ssh/config`, { shell: Shell.shellPath });
-        writeFileSync(configPath, configContent);
+    private async runSetupAccessScript(): Promise<boolean> {
+        const setupAccessScriptPath = await this.getSshScript();
+        const cmd = process.platform === 'win32' ? `${Shell.shellPath} -l -c "bash '${setupAccessScriptPath}'"` :
+            `bash '${setupAccessScriptPath}'`;
+        const output = execSync(cmd);
+        return output.length !== 0;
     }
 
-    private createSshLinks(): void {
-        const winSshFolder = join(`${process.env.USERPROFILE}`, `.ssh`);
-        const cygwSshFolder = join(ExtensionSettings._cygwinPath!, `home`, `${process.env.USERNAME}`, `.ssh`);
-        if (!existsSync(cygwSshFolder)) {
-            mkdirSync(cygwSshFolder);
-        }
-        readdirSync(winSshFolder).forEach((name) => {
-            if (!existsSync(join(cygwSshFolder, name))) {
-                linkSync(join(winSshFolder, name), join(cygwSshFolder, name));
-                const path = join("/", "cygdrive", winSshFolder, name).replace(':', '').split(sep).join(posix.sep);
-                execSync(`${Shell.shellPath} -l -c "chmod 600 ${path}"`);
-            }
-        });
-        if (execSync(`${Shell.shellPath} -l -c "cat ~/.ssh/config"`).toString().
-            indexOf('Permission denied') >= 0) {
-            throw Error("Failed to create links");
-        }
-    }
-
-    private async runSetupAccessScript(defaultWinConfig: boolean): Promise<boolean> {
-        if (!this._setupAccessScriptPath) {
-            this._setupAccessScriptPath = await this.getSshScript();
-        }
-        if (!this._setupAccessScriptPath) {
-            return false;
-        }
-        const cmd = process.platform === 'win32' ? `${Shell.shellPath} -l -c "${defaultWinConfig === true ? 'export HOME=$USERPROFILE && ' : ''}bash '${this._setupAccessScriptPath}'"` :
-            `bash '${this._setupAccessScriptPath}'`;
-        return execSync(cmd).length !== 0;
-    }
     private isSshConfigExist(): boolean {
-        const config = process.platform === 'win32' ? join(`${process.env.USERPROFILE}`, `.ssh`, `config`) : this._sshConfigPath;
-        return existsSync(config);
+        return existsSync(this._sshConfigPath);
     }
 
     private isSshConfigContentValid(): boolean {
-        const config = process.platform === 'win32' ? join(`${process.env.USERPROFILE}`, `.ssh`, `config`) : this._sshConfigPath;
-        const sshConfigContent = readFileSync(config).toString();
+        const sshConfigContent = readFileSync(this._sshConfigPath).toString();
         const res = sshConfigContent.match(/Host devcloud/gi);
         return res !== null;
     }
@@ -211,4 +161,17 @@ export class SshConfigUtils {
         return true;
     }
 
+    private async setRemoteSshSettings(): Promise<void> {
+        const settings = vscode.workspace.getConfiguration('remote');
+        await settings.update('SSH.configFile', this._sshConfigPath, true);
+        await settings.update('SSH.path', join(ExtensionSettings._cygwinPath!, 'bin', 'ssh.exe'), true);
+
+    }
+}
+
+export async function unsetRemoteSshSettings(): Promise<void> {
+    const settings = vscode.workspace.getConfiguration('remote');
+    await settings.update('SSH.configFile', undefined, true);
+    await settings.update('SSH.path', undefined, true);
+    return;
 }

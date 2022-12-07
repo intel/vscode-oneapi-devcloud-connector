@@ -131,6 +131,10 @@ extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.
 
   In this case, try to restart the OS on your host system.
 
+* Unable to connect to compute node with correct extension settings.
+   
+   Some Intel DevCloud nodes with Free status may not actually be available. In this case, try to connect to another node.
+
 ## License
 This extension is released under the MIT License.
 
