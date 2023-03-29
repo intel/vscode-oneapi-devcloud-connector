@@ -12,7 +12,9 @@ import { tmpdir } from 'os';
 import { execSync } from 'child_process';
 import { isIP } from 'net';
 import { devcloudName } from './constants';
+import { Logger } from "./logger";
 
+const logger = Logger.getInstance();
 export class ExtensionSettings {
     public static _proxy: boolean | undefined;
     public static _proxyServer: string | undefined;
@@ -22,7 +24,8 @@ export class ExtensionSettings {
     public static _cluster: string | undefined;
     public static _clusterFullName: string;
 
-    public static async refresh(): Promise<boolean> {
+    public static async refresh(): Promise<void> {
+        logger.debug("refresh()");
         this._clusterFullName = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<string>("choose_cluster") ?? `Public ${devcloudName}`;
         switch (this._clusterFullName) {
             case `Public ${devcloudName}`:
@@ -43,7 +46,8 @@ export class ExtensionSettings {
         }
         this._connectionTimeout = vscode.workspace.getConfiguration("intel-corporation.vscode-oneapi-devcloud-connector").get<number>('connection_timeout');
         if (this._connectionTimeout === undefined || this._connectionTimeout < 0) {
-            vscode.window.showWarningMessage(`The Session Timeout value specified in the extension settings is incorrect.\n The default value of 30 seconds will be used`);
+            logger.warn("The Session Timeout value specified in the extension settings is incorrect.\n The default value of 30 seconds will be used");
+            vscode.window.showWarningMessage("The Session Timeout value specified in the extension settings is incorrect.\n The default value of 30 seconds will be used");
             this._connectionTimeout = 30000;
         } else {
             this._connectionTimeout *= 1000;
@@ -56,36 +60,28 @@ export class ExtensionSettings {
         } else {
             this._cygwinPath = posix.normalize(this._cygwinPath.replace(`\r`, "")).split(/[\\\/]/g).join(posix.sep);
         }
-
-
-        return true;
+        logger.info(`\n\
+        Extension settings:\n\
+        proxy:${this._proxy}\n\
+        proxyServer:${this._proxyServer}\n\
+        jobTimeout: ${this._jobTimeout}\n\
+        connectionTimeout: ${this._connectionTimeout}\n\
+        cygwinPath: ${this._cygwinPath}\n\
+        cluster: ${this._cluster}\n\
+        clusterFullName:${this._clusterFullName}`);
     }
 
-    public static async checkSettingsFormat(): Promise<boolean> {
-        if (!this.checkProxyServer() ||
-            !this.checkJobTimeout() ||
-            !await this.checkCygwinPath()) {
-            return false;
-        }
-        this.checkSessionTimeout();
-        return true;
+    public static async checkSettingsFormat(): Promise<void> {
+        logger.debug("checkSettingsFormat()");
+        this.checkProxyServer();
+        this.checkJobTimeout();
+        await this.checkCygwinPath();
     }
 
-    private static checkSessionTimeout(): void {
-        if (this._connectionTimeout === undefined || this._connectionTimeout < 0) {
-            vscode.window.showWarningMessage(`The Session Timeout value specified in the extension settings is incorrect.\n The default value of 30 seconds will be used`);
-            this._connectionTimeout = 30000;
-        }
-    }
-
-    private static checkProxyServer(): boolean {
+    private static checkProxyServer(): void {
+        logger.debug("checkProxyServer()");
         if (this._proxy === true) {
-            if (this._proxyServer !== undefined) {
-                if (this._proxyServer.length === 0) {
-
-                    vscode.window.showErrorMessage(`You have the Proxy option enabled in the settings, but the Proxy_server is not specified`, { modal: true });
-                    return false;
-                }
+            if (this._proxyServer !== undefined && this._proxyServer.length !== 0) {
                 try {
                     new URL(this._proxyServer);
                 }
@@ -95,49 +91,50 @@ export class ExtensionSettings {
                         const ip = separatedProxy[0];
                         const port = separatedProxy[1];
                         if (isIP(ip) && !isNaN(Number(port))) {
-                            return true;
+                            return;
                         }
                     }
-
-                    vscode.window.showErrorMessage(`The proxy server value is invalid`, { modal: true });
-                    return false;
+                    logger.error("checkProxyServer() - failed: the proxy server value is invalid");
+                    throw Error("The proxy server value is invalid");
                 }
             } else {
-                vscode.window.showErrorMessage(`You have the Proxy option enabled in the settings, but the Proxy_server is not specified`, { modal: true });
-                return false;
+                logger.error("checkProxyServer() - failed: the Proxy option enabled in the settings, but the Proxy_server is not specified");
+                throw Error("You have the Proxy option enabled in the settings, but the Proxy_server is not specified");
             }
         }
-        return true;
     }
 
-    private static checkJobTimeout(): boolean {
+    private static checkJobTimeout(): void {
+        logger.debug("checkJobTimeout()");
         if (this._jobTimeout === undefined) {
-            return true;
+            return;
         }
         const splited = this._jobTimeout.split(':');
         if (splited.length !== 3) {
-            vscode.window.showErrorMessage("Invalid session timeout format. Use the following format: hh:mm:ss", { modal: true });
-            return false;
+            logger.error("checkJobTimeout() - failed: Invalid session timeout format. Use the following format: hh:mm:ss");
+            throw Error("Invalid session timeout format. Use the following format: hh:mm:ss");
         }
         const hh = Number(splited[0]);
         const mm = Number(splited[1]);
         const ss = Number(splited[2]);
         if (isNaN(hh) || isNaN(mm) || isNaN(ss)) {
-            vscode.window.showErrorMessage("Invalid session timeout value. hh,mm,ss must be positive integers", { modal: true });
-            return false;
+            logger.error("checkJobTimeout() - failed: Invalid session timeout value. hh,mm,ss must be positive integers");
+            throw Error("Invalid session timeout value. hh,mm,ss must be positive integers");
+
         }
         if (hh < 0 || mm < 0 || ss < 0 || hh > 24 || mm > 59 || ss > 59) {
-            vscode.window.showErrorMessage("Invalid session timeout value. hh,mm,ss must be positive integers, where ss and mm take values from 0 to 59, and hh from 0 to 24", { modal: true });
-            return false;
+            logger.error("checkJobTimeout() - failed: Invalid session timeout value. hh,mm,ss must be positive integers, where ss and mm take values from 0 to 59, and hh from 0 to 24");
+            throw Error("Invalid session timeout value. hh,mm,ss must be positive integers, where ss and mm take values from 0 to 59, and hh from 0 to 24");
+
         }
         if (hh === 24 && (mm !== 0 || ss !== 0)) {
-            vscode.window.showErrorMessage("Invalid session timeout value. Max time is 24h, so the only valid entry for hh = 24 is 24:00:00", { modal: true });
-            return false;
+            logger.error("checkJobTimeout() - failed: Invalid session timeout value. Max time is 24h, so the only valid entry for hh = 24 is 24:00:00");
+            throw Error("Invalid session timeout value. Max time is 24h, so the only valid entry for hh = 24 is 24:00:00");
         }
-        return true;
     }
 
-    private static async checkCygwinPath(): Promise<boolean> {
+    private static async checkCygwinPath(): Promise<void> {
+        logger.debug("checkCygwinPath()");
         if ((process.platform === 'win32') && (!this._cygwinPath || !existsSync(this._cygwinPath))) {
             const message = "Path to the Cygwin folder specified in the extension settings is invalid.\n\
 Specify correct path or install Cygwin. Then run Setup Connection command again.\n\n\
@@ -150,10 +147,10 @@ To install Cygwin?";
                 installTerminal.show();
                 installTerminal.sendText(path);
             }
-            if (selection === 'No') {
-                return false;
+            else {
+                logger.error("checkCygwinPath() - failed: cygwin installation rejected");
+                throw Error("Install Cygwin. Then run Setup Connection command again");
             }
         }
-        return true;
     }
 }

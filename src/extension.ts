@@ -10,8 +10,14 @@ import { DevConnect } from './devconnect';
 import { checkAndInstallExtension, removeDevCloudTerminalProfile } from './utils/other';
 import { ExtensionSettings } from './utils/extension_settings';
 import { unsetRemoteSshSettings } from './utils/ssh_config';
+import { Logger } from './utils/logger';
+
+const logger = Logger.getInstance();
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
+	logger.info("===========================");
+	logger.info("Activate extension ");
+
 	await removeDevCloudTerminalProfile();
 	for (const t of vscode.window.terminals) {
 		if ((t.name === 'devcloudService - do not close') || (t.name === 'HeadNode terminal') || (t.name === 'Install Cygwin') || (t.name.indexOf('DevCloudWork:') !== -1)) {
@@ -31,21 +37,25 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('intel-corporation.vscode-oneapi-devcloud-connector.help', () => devcloud.getHelp()));
 	context.subscriptions.push(vscode.commands.registerCommand('intel-corporation.vscode-oneapi-devcloud-connector.setupConnection', async () => {
-		await ExtensionSettings.refresh();
-		if (!await ExtensionSettings.checkSettingsFormat()) {
-			return;
+		try {
+            await ExtensionSettings.refresh();
+            await ExtensionSettings.checkSettingsFormat();
+            checkAndInstallExtension('ms-vscode-remote.remote-ssh');
+			devcloud.setupConnection();
 		}
-		if (!checkAndInstallExtension('ms-vscode-remote.remote-ssh')) {
-			return;
+		catch (e) {
+			vscode.window.showErrorMessage((e as Error).message, { modal: true });
 		}
-		devcloud.setupConnection();
 	}
 	));
 	context.subscriptions.push(vscode.commands.registerCommand('intel-corporation.vscode-oneapi-devcloud-connector.closeConnection', () => devcloud.closeConnection()));
 	context.subscriptions.push(vscode.commands.registerCommand('intel-corporation.vscode-oneapi-devcloud-connector.devcloudTerminal', () => devcloud.createDevCloudTerminal()));
+	context.subscriptions.push(vscode.commands.registerCommand('intel-corporation.vscode-oneapi-devcloud-connector.openLogFile', () => devcloud.openLogFile()));
 }
 
 export async function deactivate(): Promise<void> {
+	logger.info("Deactivate extension ");
+	logger.info("===========================");
 	const devcloud = DevConnect.getInstance();
 	devcloud.closeConnection();
 	await unsetRemoteSshSettings();

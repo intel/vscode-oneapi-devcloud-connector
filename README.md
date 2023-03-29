@@ -125,6 +125,17 @@ extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.
 
 * Close the Visual Studio Code window that is running the Intel DevCloud extension and Remote-SSH window.
 
+### Reading a log file
+
+If an error occurs, it is possible to open the log file and see what happens. 
+This is more useful for developers when solving user problems. 
+
+If you create an issue on [Github](https://github.com/intel/vscode-oneapi-devcloud-connector/issues) or a thread on the [Intel® DevCloud forum](https://community.intel.com/t5/Intel-DevCloud/bd-p/devcloud) with your problem, attach the log file.
+
+   To read the log file:
+* Press `Ctrl+Shift+P ( or View -> Command Palette... )` to open the Command Palette.
+ Type **Intel DevCloud** and select `Intel DevCloud: Open Log file`
+
 ## Known issues
 
 * The extension successfully connects to Intel DevCloud, but Remote-SSH window can't establish a connection.

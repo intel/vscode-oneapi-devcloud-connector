@@ -7,8 +7,12 @@
 
 import * as vscode from 'vscode';
 import { devcloudName } from './constants';
+import { Logger } from "./logger";
 
-export function checkAndInstallExtension(extName: string): boolean {
+const logger = Logger.getInstance();
+
+export function checkAndInstallExtension(extName: string): void {
+	logger.debug(`checkAndInstallExtension(extName:${extName})`);
 	const remoteSSHext = vscode.extensions.getExtension(extName);
 	if (!remoteSSHext && !vscode.env.remoteName) {
 		const goToInstall = 'Install';
@@ -18,12 +22,13 @@ export function checkAndInstallExtension(extName: string): boolean {
 					vscode.commands.executeCommand('workbench.extensions.installExtension', extName);
 				}
 			});
-		return false;
+		logger.error(`You must install the Remote-SSH extension by Microsoft to use the ${devcloudName} Connector for Intel oneAPI Toolkits`);
+		throw Error("Install the Remote-SSH extension by Microsoft. Then run Setup Connection command again");
 	}
-	return true;
 }
 
 export async function addDevCloudTerminalProfile(nodeName: string, shellPath: string | undefined) {
+	logger.debug(`addDevCloudTerminalProfile( nodeName:${nodeName}, shellPath:${shellPath})`);
 	let os = '';
 	if (process.platform === 'win32') {
 		os = 'windows';
@@ -43,6 +48,7 @@ export async function addDevCloudTerminalProfile(nodeName: string, shellPath: st
 }
 
 export async function removeDevCloudTerminalProfile() {
+	logger.debug("removeDevCloudTerminalProfile()");
 	let os = '';
 	if (process.platform === 'win32') {
 		os = 'windows';

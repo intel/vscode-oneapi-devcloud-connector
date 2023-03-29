@@ -1,9 +1,11 @@
 # Change Log
+## 0.2.2
 
+- Added logger
+  
 ## 0.2.1
 
 - Updated dependencies
-
 ## 0.2.0
 
 - Added the ability to connect to FPGA and NDA clusters
