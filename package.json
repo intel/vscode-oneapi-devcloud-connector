@@ -7,7 +7,7 @@
   "icon": "media/oneapi-logo.png",
   "publisher": "intel-corporation",
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.81.0"
   },
   "categories": [
     "Other"
@@ -94,17 +94,17 @@
     "@types/chai": "^4.3.5",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.2",
-    "@types/vscode": "^1.80.0",
-    "@typescript-eslint/eslint-plugin": "^6.1.0",
-    "@typescript-eslint/parser": "^6.1.0",
+    "@types/node": "^20.5.0",
+    "@types/vscode": "^1.81.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
     "chai": "^4.3.7",
-    "eslint": "^8.45.0",
+    "eslint": "^8.47.0",
     "glob": "^10.3.3",
     "mocha": "^10.2.0",
     "typescript": "^5.1.6",
-    "@vscode/vsce": "^2.19.0",
-    "vscode-extension-tester": "^5.8.0"
+    "@vscode/vsce": "^2.20.1",
+    "vscode-extension-tester": "^5.9.0"
   },
   "dependencies": {
     "log4js": "6.9.1"
