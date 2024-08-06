@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.6
+
+- updated license for copyright
+
 ## 0.2.5
 
 - 3rd Party component dependency version update
