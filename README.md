@@ -6,7 +6,6 @@ This project is no longer maintained and has reached its End-of-Life (EOL). For 
 * Intel® DevCloud Connector for Intel® oneAPI Toolkits will be discontinued in 2025.0.0 release or later.
 * No further updates or maintenance will be provided.
 * Issues and pull requests will no longer be monitored or addressed.
-* Security vulnerabilities will not be patched.
 * The repository may be archived in the near future.
 
 #### Alternatives
