@@ -1,5 +1,21 @@
 # Intel® DevCloud Connector for Intel® oneAPI Toolkits
 
+## ⚠️ End-of-Life Notice
+
+This project is no longer maintained and has reached its End-of-Life (EOL).
+* Intel® DevCloud Connector for oneAPI is discontinued in the 2025.0.0 release.
+* No further updates or maintenance will be provided.
+* Issues and pull requests will no longer be monitored or addressed.
+* The repository may be archived in the near future.
+
+#### Alternatives
+If you're looking for alternatives, you may want to consider the following project:
+* [Intel® Tiber™ Developer Cloud](https://console.cloud.intel.com/docs/tutorials/vs_code.html)
+
+***
+
+## [Original README Content]
+
 #### | [Repository][vsix-repo] | [Issues and Known Bugs][vsix-issues] | [Documentation][vsix-docs] | [Forum][vsix-forum] |
 
 [vsix-repo]:   <https://github.com/intel/vscode-oneapi-devcloud-connector>
